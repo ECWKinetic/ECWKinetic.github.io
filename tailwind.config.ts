@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,15 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Kinetic brand colors
+				kinetic: {
+					copper: '#B87554',
+					navy: '#1B2B3A',
+					teal: '#4B8F9F',
+					lightBlue: '#A4C2CF',
+					green: '#5A9178',
+					lightGray: '#F5F5F5',
 				}
 			},
 			borderRadius: {
