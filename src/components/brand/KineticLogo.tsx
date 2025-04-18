@@ -10,18 +10,33 @@ interface KineticLogoProps {
 const KineticLogo = ({ className, isWhite = false }: KineticLogoProps) => {
   return (
     <div className={cn("flex items-center", className)}>
-      {/* SVG Logo - Simplified version of the double chevron logo */}
-      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-3">
+      {/* SVG Logo - Double chevron logo matching the provided design */}
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-3">
         {/* Copper Chevron */}
-        <path d="M24 8L12 18L24 28" stroke={isWhite ? "#FFFFFF" : "#B87554"} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+        <path 
+          d="M26 6L14 20L26 34" 
+          stroke={isWhite ? "#FFFFFF" : "#B87554"} 
+          strokeWidth="4" 
+          strokeLinecap="square" 
+          strokeLinejoin="miter"
+        />
         {/* Navy Chevron */}
-        <path d="M16 4L4 18L16 32" stroke={isWhite ? "#A4C2CF" : "#1B2B3A"} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+        <path 
+          d="M18 6L6 20L18 34" 
+          stroke={isWhite ? "#A4C2CF" : "#1B2B3A"} 
+          strokeWidth="4" 
+          strokeLinecap="square" 
+          strokeLinejoin="miter"
+        />
       </svg>
       
-      {/* Text Logo */}
-      <div className={isWhite ? "text-white" : "text-kinetic-navy"}>
-        <div className="font-bold text-xl tracking-tight">KINETIC</div>
-        <div className="text-xs tracking-wider">CONSULTING PARTNERS</div>
+      {/* Text Logo with updated styling */}
+      <div className={cn(
+        "flex flex-col",
+        isWhite ? "text-white" : "text-kinetic-navy"
+      )}>
+        <span className="text-xl font-bold tracking-wider leading-tight">KINETIC</span>
+        <span className="text-[0.65rem] tracking-[0.2em] leading-tight">CONSULTING PARTNERS</span>
       </div>
     </div>
   );
