@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import KineticLogo from '../brand/KineticLogo';
-import { Linkedin, Mail, Phone } from 'lucide-react';
+import { Linkedin, Mail } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -15,14 +15,19 @@ const Footer = () => {
               Kinetic Consulting Partners delivers expert strategic consulting focused on creating sustainable value for our clients through innovative solutions.
             </p>
             <div className="flex space-x-4 mt-6">
-              <a href="https://linkedin.com" className="text-white hover:text-kinetic-copper transition-colors">
+              <a 
+                href="https://www.linkedin.com/company/kinetic-consulting-partners" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-white hover:text-kinetic-copper transition-colors"
+              >
                 <Linkedin size={20} />
               </a>
-              <a href="mailto:info@kineticconsulting.com" className="text-white hover:text-kinetic-copper transition-colors">
+              <a 
+                href="mailto:info@kineticconsultingpartners.com" 
+                className="text-white hover:text-kinetic-copper transition-colors"
+              >
                 <Mail size={20} />
-              </a>
-              <a href="tel:+1234567890" className="text-white hover:text-kinetic-copper transition-colors">
-                <Phone size={20} />
               </a>
             </div>
           </div>
@@ -41,11 +46,7 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-bold mb-4">Contact</h3>
             <address className="not-italic">
-              <p>123 Business Avenue</p>
-              <p>Suite 200</p>
-              <p>New York, NY 10001</p>
-              <p className="mt-4">info@kineticconsulting.com</p>
-              <p>(123) 456-7890</p>
+              <p>info@kineticconsultingpartners.com</p>
             </address>
           </div>
         </div>
