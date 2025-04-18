@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { ArrowRight, BarChart3, Users, Briefcase, PieChart, Target, Building } from 'lucide-react';
+import { ArrowRight, BarChart3, Users, Briefcase, PieChart, Target, Building, MapPin, Landmark } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import MainLayout from '@/components/layout/MainLayout';
@@ -8,15 +7,20 @@ import MainLayout from '@/components/layout/MainLayout';
 const Index = () => {
   return (
     <MainLayout>
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-kinetic-navy to-kinetic-navy/90 text-white py-20">
-        <div className="container mx-auto px-4">
+      {/* Hero Section with Chicago Theme */}
+      <section className="relative bg-gradient-to-r from-kinetic-navy to-kinetic-navy/90 text-white py-24">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=2244')] bg-cover bg-center opacity-10"></div>
+        <div className="container mx-auto px-4 relative">
           <div className="max-w-3xl">
+            <div className="flex items-center gap-2 mb-4 text-kinetic-copper">
+              <MapPin className="h-5 w-5" />
+              <span className="text-sm font-medium">Chicago-Based Excellence</span>
+            </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
               Strategic Solutions for <span className="text-kinetic-copper">Business Transformation</span>
             </h1>
             <p className="text-xl mb-8">
-              Empowering organizations to achieve sustainable growth through innovative consulting partnerships.
+              From our home in Chicago's business district, we empower organizations across the Midwest and beyond to achieve sustainable growth through innovative consulting partnerships.
             </p>
             <div className="flex flex-wrap gap-4">
               <Button className="bg-kinetic-copper hover:bg-kinetic-copper/90">
@@ -34,9 +38,9 @@ const Index = () => {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-kinetic-navy mb-4">Why We Exist</h2>
+            <h2 className="text-3xl font-bold text-kinetic-navy mb-4">Chicago's Premier Consulting Partner</h2>
             <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-              Kinetic Consulting Partners was founded on the principle that business consulting should deliver tangible, measurable results with a client-centric approach.
+              Founded in the heart of Chicago, Kinetic Consulting Partners combines Midwestern values with world-class expertise to deliver tangible, measurable results with a client-centric approach.
             </p>
           </div>
           
@@ -46,9 +50,9 @@ const Index = () => {
                 <div className="bg-kinetic-lightGray p-3 rounded-full w-14 h-14 flex items-center justify-center mb-4">
                   <Target className="h-8 w-8 text-kinetic-copper" />
                 </div>
-                <h3 className="text-xl font-bold mb-2 text-kinetic-navy">Purpose-Driven</h3>
+                <h3 className="text-xl font-bold mb-2 text-kinetic-navy">Midwest Heritage</h3>
                 <p className="text-gray-600">
-                  We empower organizations to accelerate value creation through sustainable transformation.
+                  Built on Chicago's tradition of innovation and enterprise, delivering transformation with integrity.
                 </p>
               </CardContent>
             </Card>
@@ -68,11 +72,11 @@ const Index = () => {
             <Card className="border-t-4 border-t-kinetic-green">
               <CardContent className="pt-6">
                 <div className="bg-kinetic-lightGray p-3 rounded-full w-14 h-14 flex items-center justify-center mb-4">
-                  <BarChart3 className="h-8 w-8 text-kinetic-green" />
+                  <Landmark className="h-8 w-8 text-kinetic-green" />
                 </div>
-                <h3 className="text-xl font-bold mb-2 text-kinetic-navy">Results-Oriented</h3>
+                <h3 className="text-xl font-bold mb-2 text-kinetic-navy">Global Reach</h3>
                 <p className="text-gray-600">
-                  We focus on delivering measurable outcomes and sustainable value that drives growth.
+                  From our Chicago base, we deliver impact across industries and borders with proven methodologies.
                 </p>
               </CardContent>
             </Card>
@@ -189,15 +193,16 @@ const Index = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 bg-kinetic-navy text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">Ready to Accelerate Your Business Growth?</h2>
+      {/* CTA Section with Chicago Theme */}
+      <section className="py-16 bg-kinetic-navy text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1494522855154-9297ac14b55f?q=80&w=2240')] bg-cover bg-center opacity-10"></div>
+        <div className="container mx-auto px-4 text-center relative">
+          <h2 className="text-3xl font-bold mb-6">Ready to Transform Your Business?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Connect with our team to discuss how Kinetic Consulting Partners can help you achieve your strategic objectives.
+            Connect with our Chicago team to discuss how Kinetic Consulting Partners can help you achieve your strategic objectives.
           </p>
           <Button className="bg-kinetic-copper hover:bg-kinetic-copper/90 text-white">
-            Contact Us Today
+            Contact Our Chicago Office
           </Button>
         </div>
       </section>
