@@ -1,9 +1,15 @@
-
 import React from 'react';
 import { MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const HeroSection = () => {
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="relative bg-gradient-to-r from-kinetic-navy to-kinetic-navy/90 text-white py-24">
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=2244')] bg-cover bg-center opacity-10"></div>
@@ -20,11 +26,18 @@ const HeroSection = () => {
             From our home in Chicago's business district, we empower organizations across the Midwest and beyond to achieve sustainable growth through innovative consulting partnerships.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Button className="bg-kinetic-copper hover:bg-kinetic-copper/90">
+            <Button 
+              onClick={() => scrollToSection('value-creation')}
+              className="bg-kinetic-copper hover:bg-kinetic-copper/90 text-white font-medium"
+            >
               Explore Our Services
             </Button>
-            <Button variant="outline" className="border-white text-white hover:bg-white/10">
-              Meet Our Team
+            <Button 
+              onClick={() => scrollToSection('contact')}
+              variant="outline"
+              className="border-2 border-white text-white hover:bg-white/10 font-medium"
+            >
+              Get in Touch
             </Button>
           </div>
         </div>

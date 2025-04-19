@@ -64,9 +64,10 @@ interface NavLinksProps {
 
 const NavLinks = ({ isMobile, onItemClick, onScroll }: NavLinksProps) => {
   const links = [
-    { name: 'Services', id: 'services' },
-    { name: 'Approach', id: 'approach' },
-    { name: 'Industries', id: 'industries' },
+    { name: 'Home', id: 'home' },
+    { name: 'Value Creation', id: 'value-creation' },
+    { name: 'How We Work', id: 'how-we-work' },
+    { name: 'Clients', id: 'clients' },
     { name: 'Team', id: 'team' },
     { name: 'Contact', id: 'contact' },
   ];

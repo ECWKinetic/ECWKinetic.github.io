@@ -1,55 +1,63 @@
 
 import React from 'react';
-import { Target, Users, Landmark } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 
 const WhyWeExistSection = () => {
+  const workPillars = [
+    {
+      title: "Accountable to All",
+      points: [
+        "We serve both the fund and the management team because lasting change requires buy-in from all stakeholders",
+        "We work with not for or against our clients and assume accountability for our collective outcomes"
+      ]
+    },
+    {
+      title: "Sleeves Rolled Up",
+      points: [
+        "Each of our consultants has been "in industry" so we know what actual work looks like",
+        "We enjoy getting our hands dirty – and we know when to dig in",
+        "We build models, clean up data, write the plan, walk the floor, and talk shop"
+      ]
+    },
+    {
+      title: "Only the necessary",
+      points: [
+        "Slides that sit on a shelf don't create value, but building out an Excel model, process map, or visual may",
+        "We only create the necessary to communicate or to help make a decision"
+      ]
+    }
+  ];
+
   return (
     <section className="py-16 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-kinetic-navy mb-4">Your Premier Consulting Partner</h2>
-          <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-            Kinetic Consulting Partners combines proven expertise with innovative approaches to deliver tangible, measurable results with a client-centric approach.
-          </p>
+          <h2 className="text-3xl font-bold text-kinetic-navy mb-4">How We Work</h2>
+          <div className="text-lg text-gray-700 max-w-4xl mx-auto space-y-6">
+            <p className="mb-4">
+              We believe that most of the answers lay in wait in the PortCo and its management - they often have the industry and company knowledge to know what needs to get done.
+            </p>
+            <p>
+              Our consultants specialize in how to <span className="text-kinetic-teal font-semibold">accelerate and communicate</span> across all levels - creating relief – not fear – with PortCo leadership.
+            </p>
+          </div>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <Card className="border-t-4 border-t-kinetic-copper">
-            <CardContent className="pt-6">
-              <div className="bg-kinetic-lightGray p-3 rounded-full w-14 h-14 flex items-center justify-center mb-4">
-                <Target className="h-8 w-8 text-kinetic-copper" />
-              </div>
-              <h3 className="text-xl font-bold mb-2 text-kinetic-navy">Midwest Heritage</h3>
-              <p className="text-gray-600">
-                Built on Chicago's tradition of innovation and enterprise, delivering transformation with integrity.
-              </p>
-            </CardContent>
-          </Card>
-          
-          <Card className="border-t-4 border-t-kinetic-teal">
-            <CardContent className="pt-6">
-              <div className="bg-kinetic-lightGray p-3 rounded-full w-14 h-14 flex items-center justify-center mb-4">
-                <Users className="h-8 w-8 text-kinetic-teal" />
-              </div>
-              <h3 className="text-xl font-bold mb-2 text-kinetic-navy">Client-Centric</h3>
-              <p className="text-gray-600">
-                We partner closely with our clients to deliver tailored solutions that address their unique challenges.
-              </p>
-            </CardContent>
-          </Card>
-          
-          <Card className="border-t-4 border-t-kinetic-green">
-            <CardContent className="pt-6">
-              <div className="bg-kinetic-lightGray p-3 rounded-full w-14 h-14 flex items-center justify-center mb-4">
-                <Landmark className="h-8 w-8 text-kinetic-green" />
-              </div>
-              <h3 className="text-xl font-bold mb-2 text-kinetic-navy">Global Reach</h3>
-              <p className="text-gray-600">
-                From our Chicago base, we deliver impact across industries and borders with proven methodologies.
-              </p>
-            </CardContent>
-          </Card>
+          {workPillars.map((pillar, index) => (
+            <Card key={index} className="border-t-4 border-t-kinetic-copper">
+              <CardContent className="pt-6">
+                <h3 className="text-xl font-bold mb-4 text-kinetic-navy">{pillar.title}</h3>
+                <ul className="space-y-4">
+                  {pillar.points.map((point, idx) => (
+                    <li key={idx} className="text-gray-600">
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
     </section>
