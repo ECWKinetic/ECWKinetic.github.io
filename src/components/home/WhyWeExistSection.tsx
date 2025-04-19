@@ -14,7 +14,7 @@ const WhyWeExistSection = () => {
     {
       title: "Sleeves Rolled Up",
       points: [
-        "Each of our consultants has been "in industry" so we know what actual work looks like",
+        "Each of our consultants has been 'in industry' so we know what actual work looks like",
         "We enjoy getting our hands dirty – and we know when to dig in",
         "We build models, clean up data, write the plan, walk the floor, and talk shop"
       ]
