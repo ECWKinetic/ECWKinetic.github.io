@@ -1,12 +1,11 @@
 
 import React from 'react';
-import { ArrowRight } from 'lucide-react';
 
 const ValueCreationPillarsSection = () => {
   const pillars = [
     {
       title: "Transaction Support",
-      description: "Comprehensive support for all stages of transaction lifecycle",
+      description: "Comprehensive support for PE-owned portfolio companies throughout the transaction lifecycle",
       color: "text-kinetic-copper",
       items: [
         "Due Diligence (Ops, Commercial, Confirmatory)",
@@ -18,7 +17,7 @@ const ValueCreationPillarsSection = () => {
     },
     {
       title: "Operations Improvement",
-      description: "Driving operational excellence and efficiency",
+      description: "Driving operational excellence in small-to-mid market portfolio companies",
       color: "text-kinetic-navy",
       items: [
         "Transformation Program Management",
@@ -30,7 +29,7 @@ const ValueCreationPillarsSection = () => {
     },
     {
       title: "Commercial Excellence",
-      description: "Maximizing commercial potential and market impact",
+      description: "Maximizing commercial potential for sustainable growth",
       color: "text-kinetic-teal",
       items: [
         "Sales Process Improvement",
@@ -47,7 +46,7 @@ const ValueCreationPillarsSection = () => {
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold text-kinetic-navy mb-4">Value Creation Pillars</h2>
           <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-            Our comprehensive approach to value creation is built on three strategic pillars that drive business transformation and growth.
+            Our comprehensive approach to value creation helps small-to-mid market PE portfolio companies drive transformation and sustainable growth.
           </p>
         </div>
         
@@ -56,7 +55,7 @@ const ValueCreationPillarsSection = () => {
             <div key={index} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
               <h3 className={`text-xl font-bold mb-3 ${pillar.color}`}>{pillar.title}</h3>
               <p className="text-gray-600 mb-4">{pillar.description}</p>
-              <ul className="space-y-2 mb-4">
+              <ul className="space-y-2">
                 {pillar.items.map((item, idx) => (
                   <li key={idx} className="flex items-start">
                     <span className="mr-2">•</span>
@@ -64,9 +63,6 @@ const ValueCreationPillarsSection = () => {
                   </li>
                 ))}
               </ul>
-              <a href="#" className={`inline-flex items-center font-medium ${pillar.color}`}>
-                Learn more <ArrowRight className="ml-2 h-4 w-4" />
-              </a>
             </div>
           ))}
         </div>
@@ -76,4 +72,3 @@ const ValueCreationPillarsSection = () => {
 };
 
 export default ValueCreationPillarsSection;
-

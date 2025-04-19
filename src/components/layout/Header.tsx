@@ -93,7 +93,8 @@ const NavLinks = ({ isMobile, onItemClick, onScroll }: NavLinksProps) => {
         </a>
       ))}
       <Button 
-        className="bg-kinetic-copper text-white hover:bg-kinetic-copper/90"
+        style={{ backgroundColor: '#379392' }}
+        className="text-white hover:bg-opacity-90"
         onClick={() => onScroll('contact')}
       >
         Get in Touch

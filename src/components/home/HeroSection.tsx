@@ -1,5 +1,5 @@
+
 import React from 'react';
-import { MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const HeroSection = () => {
@@ -15,15 +15,11 @@ const HeroSection = () => {
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=2244')] bg-cover bg-center opacity-10"></div>
       <div className="container mx-auto px-4 relative">
         <div className="max-w-3xl">
-          <div className="flex items-center gap-2 mb-4 text-kinetic-copper">
-            <MapPin className="h-5 w-5" />
-            <span className="text-sm font-medium">Chicago-Based Excellence</span>
-          </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
             Strategic Solutions for <span className="text-kinetic-copper">Business Transformation</span>
           </h1>
           <p className="text-xl mb-8">
-            From our home in Chicago's business district, we empower organizations across the Midwest and beyond to achieve sustainable growth through innovative consulting partnerships.
+            Empowering small-to-mid market PE-owned portfolio companies to achieve sustainable growth through innovative consulting partnerships.
           </p>
           <div className="flex flex-wrap gap-4">
             <Button 
@@ -35,7 +31,8 @@ const HeroSection = () => {
             <Button 
               onClick={() => scrollToSection('contact')}
               variant="outline"
-              className="border-2 border-white text-white hover:bg-white/10 font-medium"
+              style={{ backgroundColor: '#379392' }}
+              className="text-white hover:bg-opacity-90 font-medium border-none"
             >
               Get in Touch
             </Button>
