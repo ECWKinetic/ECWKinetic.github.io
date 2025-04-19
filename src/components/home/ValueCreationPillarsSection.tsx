@@ -1,33 +1,44 @@
 
 import React from 'react';
-import { Target, BarChart3, Users, PieChart, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 const ValueCreationPillarsSection = () => {
   const pillars = [
     {
-      title: "Strategic Growth",
-      description: "Identifying and executing growth strategies to expand market reach and revenue streams.",
-      icon: Target,
+      title: "Transaction Support",
+      description: "Comprehensive support for all stages of transaction lifecycle",
       color: "text-kinetic-copper",
+      items: [
+        "Due Diligence (Ops, Commercial, Confirmatory)",
+        "Day-1 / 100-Day Planning",
+        "Post-Merger Integration",
+        "Carveout Support",
+        "Sell-Side Preparedness"
+      ]
     },
     {
-      title: "Operational Excellence",
-      description: "Optimizing processes to improve efficiency, reduce costs, and enhance quality.",
-      icon: BarChart3,
+      title: "Operations Improvement",
+      description: "Driving operational excellence and efficiency",
       color: "text-kinetic-navy",
+      items: [
+        "Transformation Program Management",
+        "Supply Chain Optimization",
+        "Site / Plant Assessment",
+        "Sales & Operations Planning",
+        "Procurement Transformation"
+      ]
     },
     {
-      title: "Organizational Effectiveness",
-      description: "Building high-performing teams and organizational structures that drive success.",
-      icon: Users,
+      title: "Commercial Excellence",
+      description: "Maximizing commercial potential and market impact",
       color: "text-kinetic-teal",
-    },
-    {
-      title: "Digital Transformation",
-      description: "Leveraging technology to transform business models and create competitive advantage.",
-      icon: PieChart,
-      color: "text-kinetic-green",
-    },
+      items: [
+        "Sales Process Improvement",
+        "Sales Strategy Development",
+        "Sales Operations / Forecasting Improvement",
+        "Customer & Product-level profitability analysis & margin improvement"
+      ]
+    }
   ];
 
   return (
@@ -36,16 +47,23 @@ const ValueCreationPillarsSection = () => {
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold text-kinetic-navy mb-4">Value Creation Pillars</h2>
           <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-            Our comprehensive approach to value creation is built on four strategic pillars that address the key drivers of business performance.
+            Our comprehensive approach to value creation is built on three strategic pillars that drive business transformation and growth.
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {pillars.map((pillar, index) => (
             <div key={index} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
-              <pillar.icon className={`h-12 w-12 ${pillar.color} mb-4`} />
-              <h3 className="text-xl font-bold mb-3 text-kinetic-navy">{pillar.title}</h3>
+              <h3 className={`text-xl font-bold mb-3 ${pillar.color}`}>{pillar.title}</h3>
               <p className="text-gray-600 mb-4">{pillar.description}</p>
+              <ul className="space-y-2 mb-4">
+                {pillar.items.map((item, idx) => (
+                  <li key={idx} className="flex items-start">
+                    <span className="mr-2">•</span>
+                    <span className="text-gray-700">{item}</span>
+                  </li>
+                ))}
+              </ul>
               <a href="#" className={`inline-flex items-center font-medium ${pillar.color}`}>
                 Learn more <ArrowRight className="ml-2 h-4 w-4" />
               </a>
@@ -58,3 +76,4 @@ const ValueCreationPillarsSection = () => {
 };
 
 export default ValueCreationPillarsSection;
+

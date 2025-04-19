@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
@@ -14,7 +13,7 @@ interface TeamMember {
 const teamMembers: TeamMember[] = [
   {
     name: "Chris Huss",
-    title: "Principal",
+    title: "Partner and Co-Founder",
     practice: [
       "20+ years total experience",
       "13 years of consulting with A&M, E&Y, and Axxum Consulting"
@@ -28,11 +27,11 @@ const teamMembers: TeamMember[] = [
       "BS, Industrial Engineering",
       "U of Chicago Booth MBA"
     ],
-    image: "/lovable-uploads/031eb520-82dd-472c-9fb0-b6cd081754c7.png"
+    image: "https://media.licdn.com/dms/image/v2/C5603AQHoTByT0_O11A/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1651007592263?e=1750291200&v=beta&t=tDXvzVbDOq1TYd8Ta0ntCWszS9GaiptvcjlB67S0chU"
   },
   {
     name: "Dale Cabreira",
-    title: "Principal",
+    title: "Partner and Co-Founder",
     practice: [
       "20+ years total experience",
       "16 years of M&A / Transaction support consulting with E&Y, KPMG, and BearingPoint"
@@ -46,11 +45,11 @@ const teamMembers: TeamMember[] = [
       "DePaul MBA",
       "CPA Holder"
     ],
-    image: "/lovable-uploads/5598ded2-d157-411a-ae8d-bb91226434e3.png"
+    image: "https://media.licdn.com/dms/image/v2/C4D03AQGQGmRmU-Tn-g/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1516264118059?e=1750291200&v=beta&t=WgeK_W6dM0ifyLCackuN1QXCRkkhIsAV5ASCrOl6_L0"
   },
   {
     name: "Eric West",
-    title: "Principal",
+    title: "Partner and Co-Founder",
     practice: [
       "20+ years total experience",
       "4 years of consulting at Kearney"
@@ -63,7 +62,7 @@ const teamMembers: TeamMember[] = [
       "BS, Chemical Engineering",
       "U of Chicago Booth MBA"
     ],
-    image: "/lovable-uploads/2ab02d82-a910-4e7b-86f3-e38bcb312a4a.png"
+    image: "https://media.licdn.com/dms/image/v2/D4D03AQHs-bxf4SjhRg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1707844582071?e=1750291200&v=beta&t=h_k475zmke5nuI1VwNqV0BTT66gNBXv4sokzqspzTso"
   }
 ];
 
