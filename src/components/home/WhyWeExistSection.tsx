@@ -8,9 +8,9 @@ const WhyWeExistSection = () => {
     <section className="py-16 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-kinetic-navy mb-4">Chicago's Premier Consulting Partner</h2>
+          <h2 className="text-3xl font-bold text-kinetic-navy mb-4">Your Premier Consulting Partner</h2>
           <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-            Founded in the heart of Chicago, Kinetic Consulting Partners combines Midwestern values with world-class expertise to deliver tangible, measurable results with a client-centric approach.
+            Kinetic Consulting Partners combines proven expertise with innovative approaches to deliver tangible, measurable results with a client-centric approach.
           </p>
         </div>
         

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
@@ -12,6 +11,13 @@ const Header = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <header className="border-b sticky top-0 z-50 bg-white">
       <div className="container mx-auto px-4 py-4">
@@ -22,7 +28,7 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
-            <NavLinks />
+            <NavLinks onScroll={scrollToSection} />
           </nav>
 
           {/* Mobile Menu Button */}
@@ -42,7 +48,7 @@ const Header = () => {
       {isMenuOpen && (
         <div className="md:hidden">
           <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-            <NavLinks isMobile onItemClick={() => setIsMenuOpen(false)} />
+            <NavLinks isMobile onItemClick={() => setIsMenuOpen(false)} onScroll={scrollToSection} />
           </div>
         </div>
       )}
@@ -53,33 +59,41 @@ const Header = () => {
 interface NavLinksProps {
   isMobile?: boolean;
   onItemClick?: () => void;
+  onScroll: (id: string) => void;
 }
 
-const NavLinks = ({ isMobile, onItemClick }: NavLinksProps) => {
+const NavLinks = ({ isMobile, onItemClick, onScroll }: NavLinksProps) => {
   const links = [
-    { name: 'Services', path: '/services' },
-    { name: 'Approach', path: '/approach' },
-    { name: 'Industries', path: '/industries' },
-    { name: 'Team', path: '/team' },
-    { name: 'Contact', path: '/contact' },
+    { name: 'Services', id: 'services' },
+    { name: 'Approach', id: 'approach' },
+    { name: 'Industries', id: 'industries' },
+    { name: 'Team', id: 'team' },
+    { name: 'Contact', id: 'contact' },
   ];
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    onScroll(id);
+    if (onItemClick) onItemClick();
+  };
 
   return (
     <>
       {links.map((link) => (
-        <Link
+        <a
           key={link.name}
-          to={link.path}
+          href={`#${link.id}`}
           className={`font-medium text-kinetic-navy hover:text-kinetic-copper transition-colors ${
             isMobile ? 'block py-2' : ''
           }`}
-          onClick={onItemClick}
+          onClick={(e) => handleClick(e, link.id)}
         >
           {link.name}
-        </Link>
+        </a>
       ))}
       <Button 
         className="bg-kinetic-copper text-white hover:bg-kinetic-copper/90"
+        onClick={() => onScroll('contact')}
       >
         Get in Touch
       </Button>
