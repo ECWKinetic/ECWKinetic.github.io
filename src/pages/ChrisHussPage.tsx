@@ -1,6 +1,8 @@
 
 import React from 'react';
 import MainLayout from '@/components/layout/MainLayout';
+import { Link } from 'react-router-dom';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 const ChrisHussPage = () => (
   <MainLayout>
@@ -64,6 +66,17 @@ const ChrisHussPage = () => (
             <li>Created operational playbooks (growth opportunities, pricing/margin management, sourcing, LEAN / continuous improvement, SG&amp;A, sales force effectiveness and inventory / working capital)</li>
             <li>Led multiple integration management office (IMO) to facilitate post-close integration activities</li>
           </ul>
+          {/* Navigation at bottom */}
+          <div className="mt-10 flex flex-col md:flex-row items-center justify-between gap-4">
+            <Link to="/" className="text-kinetic-copper text-sm underline flex items-center mb-2 md:mb-0">
+              <ArrowLeft className="w-4 h-4 mr-1" /> Back to Our Team
+            </Link>
+            <div className="flex gap-4 mt-2 md:mt-0">
+              <Link to="/profile/eric-west" className="flex items-center text-kinetic-copper hover:text-kinetic-navy text-sm">
+                Next <ArrowRight className="w-4 h-4 ml-1" />
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </section>

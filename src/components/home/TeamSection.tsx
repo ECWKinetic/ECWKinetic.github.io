@@ -79,7 +79,7 @@ const TeamSection = () => {
         <h2 className="text-3xl font-bold text-kinetic-navy mb-8 text-center">Our Team</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {teamMembers.map((member) => (
-            <Card key={member.name} className="bg-white">
+            <Card key={member.name} className="bg-white h-full flex flex-col">
               <CardHeader className="text-center">
                 <div className="w-48 h-48 mx-auto mb-4 overflow-hidden rounded-full">
                   <img 
@@ -91,7 +91,7 @@ const TeamSection = () => {
                 <h3 className="text-2xl font-bold text-kinetic-navy">{member.name}</h3>
                 <p className="text-kinetic-copper font-medium">{member.title}</p>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 flex flex-col flex-1">
                 <div>
                   <h4 className="font-semibold text-kinetic-navy mb-2">Practice</h4>
                   <ul className="text-sm space-y-1">
@@ -116,10 +116,10 @@ const TeamSection = () => {
                     ))}
                   </ul>
                 </div>
-                <div className="pt-2 text-center">
+                <div className="mt-auto pt-4 text-center">
                   <Link 
                     to={member.profileLink} 
-                    className="text-kinetic-copper text-sm hover:underline"
+                    className="text-kinetic-copper text-xs hover:underline"
                   >
                     See More
                   </Link>
@@ -134,3 +134,4 @@ const TeamSection = () => {
 };
 
 export default TeamSection;
+

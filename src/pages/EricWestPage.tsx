@@ -1,6 +1,8 @@
 
 import React from 'react';
 import MainLayout from '@/components/layout/MainLayout';
+import { Link } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 const EricWestPage = () => (
   <MainLayout>
@@ -60,6 +62,17 @@ const EricWestPage = () => (
             <li>Conducted customer segmentation and pricing analysis for a SaaS provider, identifying $3.5M in incremental annual revenue opportunities through targeted price increases and customer retention strategies.</li>
             <li>Built comprehensive commercial due diligence playbook for a mid-market PE firm, standardizing approach to market sizing, competitive analysis, and customer research across the portfolio.</li>
           </ul>
+          {/* Navigation at bottom */}
+          <div className="mt-10 flex flex-col md:flex-row items-center justify-between gap-4">
+            <Link to="/" className="text-kinetic-copper text-sm underline flex items-center mb-2 md:mb-0">
+              <ArrowLeft className="w-4 h-4 mr-1" /> Back to Our Team
+            </Link>
+            <div className="flex gap-4 mt-2 md:mt-0">
+              <Link to="/profile/dale-cabreira" className="flex items-center text-kinetic-copper hover:text-kinetic-navy text-sm">
+                <ArrowLeft className="w-4 h-4 mr-1" /> Previous
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </section>

@@ -1,6 +1,8 @@
 
 import React from 'react';
 import MainLayout from '@/components/layout/MainLayout';
+import { Link } from 'react-router-dom';
+import { ArrowLeft, ArrowRight, ArrowLeft as LeftIcon } from 'lucide-react';
 
 const DaleCabreiraPage = () => (
   <MainLayout>
@@ -63,6 +65,20 @@ const DaleCabreiraPage = () => (
             <li>PMO and F&A Lead for the integration and separation of a $6b global supplier of automotive products manufacturer. Integration spanned transaction lifecycle from playbook development to due diligence to key deal activities i.e., one-time costs, synergy analysis and TSAs to support the future state operating model.</li>
             <li>Led the separation of a $10b commercial aircraft leasing business from a financial services holding company. Responsible for managing the separation and operational carve-out across the O2C, P2P, R2R, A2R process, defining Day 1 dispositions, targeted operating model and related TSAs.</li>
           </ul>
+          {/* Navigation at bottom */}
+          <div className="mt-10 flex flex-col md:flex-row items-center justify-between gap-4">
+            <Link to="/" className="text-kinetic-copper text-sm underline flex items-center mb-2 md:mb-0">
+              <ArrowLeft className="w-4 h-4 mr-1" /> Back to Our Team
+            </Link>
+            <div className="flex gap-4 mt-2 md:mt-0">
+              <Link to="/profile/chris-huss" className="flex items-center text-kinetic-copper hover:text-kinetic-navy text-sm mr-4">
+                <ArrowLeft className="w-4 h-4 mr-1" /> Previous
+              </Link>
+              <Link to="/profile/eric-west" className="flex items-center text-kinetic-copper hover:text-kinetic-navy text-sm">
+                Next <ArrowRight className="w-4 h-4 ml-1" />
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </section>
