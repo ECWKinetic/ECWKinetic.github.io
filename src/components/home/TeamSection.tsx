@@ -88,9 +88,7 @@ const TeamSection = () => {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <h3 className="text-2xl font-bold text-kinetic-navy">
-                  <Link to={member.profileLink} className="hover:text-kinetic-copper underline transition-colors">{member.name}</Link>
-                </h3>
+                <h3 className="text-2xl font-bold text-kinetic-navy">{member.name}</h3>
                 <p className="text-kinetic-copper font-medium">{member.title}</p>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -117,6 +115,14 @@ const TeamSection = () => {
                       <li key={index}>{item}</li>
                     ))}
                   </ul>
+                </div>
+                <div className="pt-2 text-center">
+                  <Link 
+                    to={member.profileLink} 
+                    className="text-kinetic-copper text-sm hover:underline"
+                  >
+                    See More
+                  </Link>
                 </div>
               </CardContent>
             </Card>
