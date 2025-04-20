@@ -43,6 +43,7 @@ ${data.message}
         <Input
           placeholder="Your Name"
           {...register('name', { required: true })}
+          className="text-kinetic-navy"
         />
       </div>
       <div>
@@ -50,12 +51,13 @@ ${data.message}
           type="email"
           placeholder="Your Email"
           {...register('email', { required: true })}
+          className="text-kinetic-navy"
         />
       </div>
       <div>
         <Textarea
           placeholder="Your Message"
-          className="min-h-[120px]"
+          className="min-h-[120px] text-kinetic-navy"
           {...register('message', { required: true })}
         />
       </div>

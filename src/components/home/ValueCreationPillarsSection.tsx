@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 const ValueCreationPillarsSection = () => {
@@ -41,7 +40,7 @@ const ValueCreationPillarsSection = () => {
   ];
 
   return (
-    <section className="py-16 bg-kinetic-lightGray">
+    <section id="value-creation" className="py-16 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold text-kinetic-navy mb-4">Value Creation Pillars</h2>

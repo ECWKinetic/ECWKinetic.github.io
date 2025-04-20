@@ -19,7 +19,7 @@ const HeroSection = () => {
             Strategic Solutions for <span className="text-kinetic-copper">Business Transformation</span>
           </h1>
           <p className="text-xl mb-8">
-            Empowering small-to-mid market PE-owned portfolio companies to achieve sustainable growth through innovative consulting partnerships.
+            Empowering small-to-mid market PE-owned portfolio companies to achieve sustainable performance improvement through transaction, operational, and commercial excellence.
           </p>
           <div className="flex flex-wrap gap-4">
             <Button 

@@ -1,5 +1,7 @@
+
 import React from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Link } from 'react-router-dom';
 
 interface TeamMember {
   name: string;
@@ -8,6 +10,7 @@ interface TeamMember {
   pragmatism: string[];
   education: string[];
   image: string;
+  profileLink: string;
 }
 
 const teamMembers: TeamMember[] = [
@@ -27,7 +30,8 @@ const teamMembers: TeamMember[] = [
       "BS, Industrial Engineering",
       "U of Chicago Booth MBA"
     ],
-    image: "https://media.licdn.com/dms/image/v2/C5603AQHoTByT0_O11A/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1651007592263?e=1750291200&v=beta&t=tDXvzVbDOq1TYd8Ta0ntCWszS9GaiptvcjlB67S0chU"
+    image: "https://media.licdn.com/dms/image/v2/C5603AQHoTByT0_O11A/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1651007592263?e=1750291200&v=beta&t=tDXvzVbDOq1TYd8Ta0ntCWszS9GaiptvcjlB67S0chU",
+    profileLink: "/profile/chris-huss"
   },
   {
     name: "Dale Cabreira",
@@ -45,7 +49,8 @@ const teamMembers: TeamMember[] = [
       "DePaul MBA",
       "CPA Holder"
     ],
-    image: "https://media.licdn.com/dms/image/v2/C4D03AQGQGmRmU-Tn-g/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1516264118059?e=1750291200&v=beta&t=WgeK_W6dM0ifyLCackuN1QXCRkkhIsAV5ASCrOl6_L0"
+    image: "https://media.licdn.com/dms/image/v2/C4D03AQGQGmRmU-Tn-g/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1516264118059?e=1750291200&v=beta&t=WgeK_W6dM0ifyLCackuN1QXCRkkhIsAV5ASCrOl6_L0",
+    profileLink: "/profile/dale-cabreira"
   },
   {
     name: "Eric West",
@@ -62,7 +67,8 @@ const teamMembers: TeamMember[] = [
       "BS, Chemical Engineering",
       "U of Chicago Booth MBA"
     ],
-    image: "https://media.licdn.com/dms/image/v2/D4D03AQHs-bxf4SjhRg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1707844582071?e=1750291200&v=beta&t=h_k475zmke5nuI1VwNqV0BTT66gNBXv4sokzqspzTso"
+    image: "https://media.licdn.com/dms/image/v2/D4D03AQHs-bxf4SjhRg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1707844582071?e=1750291200&v=beta&t=h_k475zmke5nuI1VwNqV0BTT66gNBXv4sokzqspzTso",
+    profileLink: "/profile/eric-west"
   }
 ];
 
@@ -82,7 +88,9 @@ const TeamSection = () => {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <h3 className="text-2xl font-bold text-kinetic-navy">{member.name}</h3>
+                <h3 className="text-2xl font-bold text-kinetic-navy">
+                  <Link to={member.profileLink} className="hover:text-kinetic-copper underline transition-colors">{member.name}</Link>
+                </h3>
                 <p className="text-kinetic-copper font-medium">{member.title}</p>
               </CardHeader>
               <CardContent className="space-y-4">
