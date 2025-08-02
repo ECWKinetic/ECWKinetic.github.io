@@ -41,7 +41,8 @@ const clientGroups: ClientGroup[] = [
       { name: "Bain Capital", image: "/lovable-uploads/3247256b-0d3b-4f8d-929d-09cf80be347b.png" },
       { name: "Advent", image: "/lovable-uploads/8d585386-60ad-4e31-9022-ebe5dd716ded.png" },
       { name: "Monroe Street Partners", image: "/lovable-uploads/f28d3a44-9508-4d00-a606-9de4e0b77fe2.png" },
-      { name: "Littlejohn & Co.", image: "/lovable-uploads/46bb93a1-807e-418a-ac66-134ba988bdba.png" }
+      { name: "Littlejohn & Co.", image: "/lovable-uploads/46bb93a1-807e-418a-ac66-134ba988bdba.png" },
+      { name: "Invision Capital", image: "/lovable-uploads/57669bd6-2df3-4035-b821-a6584ef71d6e.png" }
     ]
   }
 ];
