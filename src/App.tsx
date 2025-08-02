@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import ChrisHussPage from "./pages/ChrisHussPage";
 import DaleCabreiraPage from "./pages/DaleCabreiraPage";
 import EricWestPage from "./pages/EricWestPage";
+import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -18,6 +19,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/services" element={<NotFound />} />
