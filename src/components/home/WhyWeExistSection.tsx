@@ -37,12 +37,9 @@ const WhyWeExistSection = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold text-kinetic-navy mb-4">How We Work</h2>
-          <div className="text-lg text-gray-700 max-w-4xl mx-auto space-y-6">
-            <p className="mb-4">
-              We believe that most of the answers lay in wait in the PortCo and its management - they often have the industry and company knowledge to know what needs to get done.
-            </p>
+          <div className="text-lg text-gray-700 max-w-4xl mx-auto">
             <p>
-              Our consultants specialize in how to <span className="text-kinetic-teal font-semibold">accelerate and communicate</span> across all levels - creating relief – not fear – with PortCo leadership.
+              We know the answers often lie within the company itself. By partnering with management and building on their insight, we bring structure and momentum to drive meaningful performance improvement.
             </p>
           </div>
         </div>
