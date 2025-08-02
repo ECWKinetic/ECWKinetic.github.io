@@ -45,7 +45,7 @@ const ValueCreationPillarsSection = () => {
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold text-kinetic-navy mb-4">Value Creation Pillars</h2>
           <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-            Our comprehensive approach to value creation helps lower- and mid-market PE portfolio companies drive transformation and sustainable growth.
+            Each of our consultants brings a distinct spike in one or more of the critical value-creation pillars essential for driving results in lower- and mid-market PE-backed companies.
           </p>
         </div>
         
