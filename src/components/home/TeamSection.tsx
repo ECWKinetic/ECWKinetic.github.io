@@ -77,9 +77,14 @@ const TeamSection = () => {
     <section id="team" className="py-16 bg-kinetic-lightGray">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-kinetic-navy mb-8 text-center">Our Team</h2>
-        <p className="text-center text-kinetic-navy mb-12 max-w-3xl mx-auto">
-          Chris, Dale, and Eric have collaborated for over five years, leveraging a network of more than 15 specialized consultants to deliver comprehensive solutions.
-        </p>
+        <div className="text-center text-kinetic-navy mb-12 max-w-3xl mx-auto space-y-4">
+          <p>
+            Each member of our team brings a unique blend of hands-on operator experience, private equity insight, and big-firm consulting expertise. This well-rounded perspective allows us to deliver pragmatic solutions and drive successful outcomes for complex projects.
+          </p>
+          <p>
+            Chris, Dale, and Eric have collaborated for over five years, working alongside a bench of 15+ expert consultants to deliver transformative results for lower- and mid-market portfolio companies.
+          </p>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {teamMembers.map((member) => (
             <div key={member.name} className="flex flex-col">
