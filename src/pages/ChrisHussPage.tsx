@@ -72,7 +72,7 @@ const ChrisHussPage = () => (
               <ArrowLeft className="w-4 h-4 mr-1" /> Back to Our Team
             </Link>
             <div className="flex gap-4 mt-2 md:mt-0">
-              <Link to="/profile/eric-west" className="flex items-center text-kinetic-copper hover:text-kinetic-navy text-sm">
+              <Link to="/profile/dale-cabreira" className="flex items-center text-kinetic-copper hover:text-kinetic-navy text-sm">
                 Next <ArrowRight className="w-4 h-4 ml-1" />
               </Link>
             </div>
