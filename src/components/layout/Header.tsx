@@ -15,10 +15,15 @@ const Header = () => {
 
   const handleNavigation = (id: string) => {
     if (location.pathname === '/') {
-      // If we're on the home page, scroll to the section
+      // If we're on the home page, scroll to the section with offset for sticky header
       const element = document.getElementById(id);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+        const headerHeight = 80; // Approximate header height
+        const elementPosition = element.offsetTop - headerHeight;
+        window.scrollTo({
+          top: elementPosition,
+          behavior: 'smooth'
+        });
       }
     } else {
       // If we're on another page, navigate to home with hash
