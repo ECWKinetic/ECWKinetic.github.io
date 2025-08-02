@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Handshake, Briefcase, ChartLine } from 'lucide-react';
+import { Handshake, Wrench, Target } from 'lucide-react';
 
 const WhyWeExistSection = () => {
   const workPillars = [
@@ -20,7 +20,7 @@ const WhyWeExistSection = () => {
         "We enjoy getting our hands dirty – and we know when to dig in",
         "We build models, clean up data, write the plan, walk the floor, and talk shop"
       ],
-      icon: <Briefcase className="h-10 w-10 text-kinetic-copper mb-4" />
+      icon: <Wrench className="h-10 w-10 text-kinetic-copper mb-4" />
     },
     {
       title: "Only the necessary",
@@ -28,7 +28,7 @@ const WhyWeExistSection = () => {
         "Slides that sit on a shelf don't create value, but building out an Excel model, process map, or visual may",
         "We only create the necessary to communicate or to help make a decision"
       ],
-      icon: <ChartLine className="h-10 w-10 text-kinetic-copper mb-4" />
+      icon: <Target className="h-10 w-10 text-kinetic-copper mb-4" />
     }
   ];
 
