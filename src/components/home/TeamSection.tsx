@@ -77,55 +77,60 @@ const TeamSection = () => {
     <section id="team" className="py-16 bg-kinetic-lightGray">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-kinetic-navy mb-8 text-center">Our Team</h2>
+        <p className="text-center text-kinetic-navy mb-12 max-w-3xl mx-auto">
+          Chris, Dale, and Eric have collaborated for over five years, leveraging a network of more than 15 specialized consultants to deliver comprehensive solutions.
+        </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {teamMembers.map((member) => (
-            <Card key={member.name} className="bg-white h-full flex flex-col">
-              <CardHeader className="text-center">
-                <div className="w-48 h-48 mx-auto mb-4 overflow-hidden rounded-full">
-                  <img 
-                    src={member.image} 
-                    alt={member.name} 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <h3 className="text-2xl font-bold text-kinetic-navy">{member.name}</h3>
-                <p className="text-kinetic-copper font-medium">{member.title}</p>
-              </CardHeader>
-              <CardContent className="space-y-4 flex flex-col flex-1">
-                <div>
-                  <h4 className="font-semibold text-kinetic-navy mb-2">Practice</h4>
-                  <ul className="text-sm space-y-1">
-                    {member.practice.map((item, index) => (
-                      <li key={index}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-kinetic-navy mb-2">Pragmatism</h4>
-                  <ul className="text-sm space-y-1">
-                    {member.pragmatism.map((item, index) => (
-                      <li key={index}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-kinetic-navy mb-2">Education</h4>
-                  <ul className="text-sm space-y-1">
-                    {member.education.map((item, index) => (
-                      <li key={index}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="mt-auto pt-4 text-center">
-                  <Link 
-                    to={member.profileLink} 
-                    className="text-kinetic-copper text-xs hover:underline"
-                  >
-                    See More
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
+            <div key={member.name} className="flex flex-col">
+              <Card className="bg-white h-full flex flex-col">
+                <CardHeader className="text-center">
+                  <div className="w-48 h-48 mx-auto mb-4 overflow-hidden rounded-full">
+                    <img 
+                      src={member.image} 
+                      alt={member.name} 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <h3 className="text-2xl font-bold text-kinetic-navy">{member.name}</h3>
+                  <p className="text-kinetic-copper font-medium">{member.title}</p>
+                </CardHeader>
+                <CardContent className="space-y-4 flex flex-col flex-1">
+                  <div>
+                    <h4 className="font-semibold text-kinetic-navy mb-2">Practice</h4>
+                    <ul className="text-sm space-y-1">
+                      {member.practice.map((item, index) => (
+                        <li key={index}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-kinetic-navy mb-2">Pragmatism</h4>
+                    <ul className="text-sm space-y-1">
+                      {member.pragmatism.map((item, index) => (
+                        <li key={index}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-kinetic-navy mb-2">Education</h4>
+                    <ul className="text-sm space-y-1">
+                      {member.education.map((item, index) => (
+                        <li key={index}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </CardContent>
+              </Card>
+              <div className="mt-4 text-center">
+                <Link 
+                  to={member.profileLink} 
+                  className="text-kinetic-copper text-sm hover:underline"
+                >
+                  See More
+                </Link>
+              </div>
+            </div>
           ))}
         </div>
       </div>
