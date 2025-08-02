@@ -16,7 +16,7 @@ const ValueCreationPillarsSection = () => {
     },
     {
       title: "Operations Improvement",
-      description: "Driving operational excellence in small-to-mid market portfolio companies",
+      description: "Driving operational excellence in lower- and mid-market portfolio companies",
       color: "text-kinetic-navy",
       items: [
         "Transformation Program Management",
@@ -45,7 +45,7 @@ const ValueCreationPillarsSection = () => {
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold text-kinetic-navy mb-4">Value Creation Pillars</h2>
           <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-            Our comprehensive approach to value creation helps small-to-mid market PE portfolio companies drive transformation and sustainable growth.
+            Our comprehensive approach to value creation helps lower- and mid-market PE portfolio companies drive transformation and sustainable growth.
           </p>
         </div>
         

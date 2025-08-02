@@ -11,7 +11,7 @@ const Footer = () => {
           <div>
             <KineticLogo className="h-12 w-auto mb-4" isWhite />
             <p className="mt-4 max-w-md">
-              Kinetic Consulting Partners delivers expert strategic consulting focused on creating sustainable value for small-to-mid market PE-owned portfolio companies through innovative solutions.
+              Kinetic Consulting Partners delivers expert strategic consulting focused on creating sustainable value for lower- and mid-market PE-owned portfolio companies through innovative solutions.
             </p>
             <div className="flex space-x-4 mt-6">
               <a 
