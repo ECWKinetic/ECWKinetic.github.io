@@ -30,7 +30,7 @@ const teamMembers: TeamMember[] = [
       "BS, Industrial Engineering",
       "U of Chicago Booth MBA"
     ],
-    image: "https://media.licdn.com/dms/image/v2/C5603AQHoTByT0_O11A/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1651007592263?e=1750291200&v=beta&t=tDXvzVbDOq1TYd8Ta0ntCWszS9GaiptvcjlB67S0chU",
+    image: "/lovable-uploads/79bf4a8d-e93a-4b77-afef-7e2b147d2f07.png",
     profileLink: "/profile/chris-huss"
   },
   {
@@ -49,7 +49,7 @@ const teamMembers: TeamMember[] = [
       "DePaul MBA",
       "CPA Holder"
     ],
-    image: "https://media.licdn.com/dms/image/v2/C4D03AQGQGmRmU-Tn-g/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1516264118059?e=1750291200&v=beta&t=WgeK_W6dM0ifyLCackuN1QXCRkkhIsAV5ASCrOl6_L0",
+    image: "/lovable-uploads/495d5524-cb88-437a-9483-056d6ad3cc62.png",
     profileLink: "/profile/dale-cabreira"
   },
   {
@@ -67,7 +67,7 @@ const teamMembers: TeamMember[] = [
       "BS, Chemical Engineering",
       "U of Chicago Booth MBA"
     ],
-    image: "https://media.licdn.com/dms/image/v2/D4D03AQHs-bxf4SjhRg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1707844582071?e=1750291200&v=beta&t=h_k475zmke5nuI1VwNqV0BTT66gNBXv4sokzqspzTso",
+    image: "/lovable-uploads/e223d156-c1c8-4506-b724-a4f612bfca2d.png",
     profileLink: "/profile/eric-west"
   }
 ];

@@ -10,7 +10,7 @@ const EricWestPage = () => (
       <div className="max-w-5xl flex flex-col md:flex-row gap-12 mx-auto">
         <div className="flex-shrink-0">
           <img
-            src="https://media.licdn.com/dms/image/v2/D4D03AQHs-bxf4SjhRg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1707844582071?e=1750291200&v=beta&t=h_k475zmke5nuI1VwNqV0BTT66gNBXv4sokzqspzTso"
+            src="/lovable-uploads/e223d156-c1c8-4506-b724-a4f612bfca2d.png"
             alt="Eric West"
             className="w-64 h-64 object-cover rounded-md shadow mb-4"
           />

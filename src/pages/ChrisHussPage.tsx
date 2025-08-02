@@ -10,7 +10,7 @@ const ChrisHussPage = () => (
       <div className="max-w-5xl flex flex-col md:flex-row gap-12 mx-auto">
         <div className="flex-shrink-0">
           <img
-            src="https://media.licdn.com/dms/image/v2/C5603AQHoTByT0_O11A/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1651007592263?e=1750291200&v=beta&t=tDXvzVbDOq1TYd8Ta0ntCWszS9GaiptvcjlB67S0chU"
+            src="/lovable-uploads/79bf4a8d-e93a-4b77-afef-7e2b147d2f07.png"
             alt="Chris Huss"
             className="w-64 h-64 object-cover rounded-md shadow mb-4"
           />

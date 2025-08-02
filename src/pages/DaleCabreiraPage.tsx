@@ -10,7 +10,7 @@ const DaleCabreiraPage = () => (
       <div className="max-w-5xl flex flex-col md:flex-row gap-12 mx-auto">
         <div className="flex-shrink-0">
           <img
-            src="https://media.licdn.com/dms/image/v2/C4D03AQGQGmRmU-Tn-g/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1516264118059?e=1750291200&v=beta&t=WgeK_W6dM0ifyLCackuN1QXCRkkhIsAV5ASCrOl6_L0"
+            src="/lovable-uploads/495d5524-cb88-437a-9483-056d6ad3cc62.png"
             alt="Dale Cabreira"
             className="w-64 h-64 object-cover rounded-md shadow mb-4"
           />
