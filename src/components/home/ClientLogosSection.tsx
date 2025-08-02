@@ -17,6 +17,7 @@ const clientGroups: ClientGroup[] = [
       { name: "ExxonMobil", image: "/lovable-uploads/05d36b61-070d-4a5d-9547-a588d74113b9.png" },
       { name: "Unilever", image: "/lovable-uploads/0df5d82a-3f67-46ca-8c98-ea491cf2eed2.png" },
       { name: "GE", image: "/lovable-uploads/32626f8f-e78e-4e5d-be03-edd83f1ebbde.png" },
+      { name: "Walmart", image: "/lovable-uploads/bcad87d6-9e52-4b75-83c2-a832ef2f42c2.png" },
       { name: "The Salvation Army", image: "/lovable-uploads/5ac1a97b-8f56-4823-9b5f-6a70010f46d9.png" },
       { name: "McMaster", image: "/lovable-uploads/f620c051-271f-430e-bf14-c10857fd7b77.png" },
       { name: "TreeHouse", image: "/lovable-uploads/338c24d3-d542-4a2d-a33c-3f0d9bd566e4.png" },
@@ -38,7 +39,9 @@ const clientGroups: ClientGroup[] = [
       { name: "Guidepost", image: "/lovable-uploads/8ab0d48d-adfe-436a-a4a0-4e02988cbd3f.png" },
       { name: "Yellow Wood Partners", image: "/lovable-uploads/8b7360b1-5d57-4999-bba4-99d1a2b2c4ad.png" },
       { name: "Bain Capital", image: "/lovable-uploads/3247256b-0d3b-4f8d-929d-09cf80be347b.png" },
-      { name: "Advent", image: "/lovable-uploads/8d585386-60ad-4e31-9022-ebe5dd716ded.png" }
+      { name: "Advent", image: "/lovable-uploads/8d585386-60ad-4e31-9022-ebe5dd716ded.png" },
+      { name: "Monroe Street Partners", image: "/lovable-uploads/f28d3a44-9508-4d00-a606-9de4e0b77fe2.png" },
+      { name: "Littlejohn & Co.", image: "/lovable-uploads/46bb93a1-807e-418a-ac66-134ba988bdba.png" }
     ]
   }
 ];
