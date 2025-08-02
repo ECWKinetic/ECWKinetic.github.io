@@ -1,21 +1,28 @@
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import KineticLogo from '../brand/KineticLogo';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+  const handleNavigation = (id: string) => {
+    if (location.pathname === '/') {
+      // If we're on the home page, scroll to the section
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      // If we're on another page, navigate to home with hash
+      window.location.href = `/#${id}`;
     }
   };
 
@@ -29,7 +36,7 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
-            <NavLinks onScroll={scrollToSection} />
+            <NavLinks onNavigate={handleNavigation} />
           </nav>
 
           {/* Mobile Menu Button */}
@@ -49,7 +56,7 @@ const Header = () => {
       {isMenuOpen && (
         <div className="md:hidden">
           <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-            <NavLinks isMobile onItemClick={() => setIsMenuOpen(false)} onScroll={scrollToSection} />
+            <NavLinks isMobile onItemClick={() => setIsMenuOpen(false)} onNavigate={handleNavigation} />
           </div>
         </div>
       )}
@@ -60,10 +67,10 @@ const Header = () => {
 interface NavLinksProps {
   isMobile?: boolean;
   onItemClick?: () => void;
-  onScroll: (id: string) => void;
+  onNavigate: (id: string) => void;
 }
 
-const NavLinks = ({ isMobile, onItemClick, onScroll }: NavLinksProps) => {
+const NavLinks = ({ isMobile, onItemClick, onNavigate }: NavLinksProps) => {
   const links = [
     { name: 'Home', id: 'home' },
     { name: 'Value Creation', id: 'value-creation' },
@@ -75,7 +82,7 @@ const NavLinks = ({ isMobile, onItemClick, onScroll }: NavLinksProps) => {
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
-    onScroll(id);
+    onNavigate(id);
     if (onItemClick) onItemClick();
   };
 
@@ -96,7 +103,7 @@ const NavLinks = ({ isMobile, onItemClick, onScroll }: NavLinksProps) => {
       <Button 
         style={{ backgroundColor: '#379392' }}
         className="text-white hover:bg-opacity-90"
-        onClick={() => onScroll('contact')}
+        onClick={() => onNavigate('contact')}
       >
         Get in Touch
       </Button>
