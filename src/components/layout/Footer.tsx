@@ -1,6 +1,5 @@
 
 import React from 'react';
-import KineticLogo from '../brand/KineticLogo';
 import { Linkedin, Mail } from 'lucide-react';
 
 const Footer = () => {
@@ -9,7 +8,11 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <KineticLogo className="h-12 w-auto mb-4" isWhite />
+            <img 
+              src="/lovable-uploads/63e50857-d311-4914-96b8-7125cb4a1775.png" 
+              alt="Kinetic Consulting Partners" 
+              className="h-12 w-auto mb-4"
+            />
             <p className="mt-4 max-w-md">
               Kinetic Consulting Partners delivers expert strategic consulting focused on creating sustainable value for lower- and mid-market PE-owned portfolio companies through innovative solutions.
             </p>
