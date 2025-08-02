@@ -14,17 +14,16 @@ const clientGroups: ClientGroup[] = [
   {
     title: "Corporate Experience",
     logos: [
-      { name: "ExxonMobil", image: "/lovable-uploads/0fcca51a-92e0-4bcc-a872-98db4bb5bc61.png" },
-      { name: "Unilever", image: "/lovable-uploads/0fcca51a-92e0-4bcc-a872-98db4bb5bc61.png" },
-      { name: "GE", image: "/lovable-uploads/0fcca51a-92e0-4bcc-a872-98db4bb5bc61.png" },
-      { name: "Walmart", image: "/lovable-uploads/0fcca51a-92e0-4bcc-a872-98db4bb5bc61.png" },
-      { name: "The Salvation Army", image: "/lovable-uploads/0fcca51a-92e0-4bcc-a872-98db4bb5bc61.png" },
-      { name: "McMaster", image: "/lovable-uploads/0fcca51a-92e0-4bcc-a872-98db4bb5bc61.png" },
-      { name: "TreeHouse", image: "/lovable-uploads/0fcca51a-92e0-4bcc-a872-98db4bb5bc61.png" },
-      { name: "Omnicom Group", image: "/lovable-uploads/0fcca51a-92e0-4bcc-a872-98db4bb5bc61.png" },
-      { name: "Coca-Cola", image: "/lovable-uploads/0fcca51a-92e0-4bcc-a872-98db4bb5bc61.png" },
-      { name: "Google", image: "/lovable-uploads/0fcca51a-92e0-4bcc-a872-98db4bb5bc61.png" },
-      { name: "Swissport", image: "/lovable-uploads/0fcca51a-92e0-4bcc-a872-98db4bb5bc61.png" }
+      { name: "ExxonMobil", image: "/lovable-uploads/05d36b61-070d-4a5d-9547-a588d74113b9.png" },
+      { name: "Unilever", image: "/lovable-uploads/0df5d82a-3f67-46ca-8c98-ea491cf2eed2.png" },
+      { name: "GE", image: "/lovable-uploads/32626f8f-e78e-4e5d-be03-edd83f1ebbde.png" },
+      { name: "The Salvation Army", image: "/lovable-uploads/5ac1a97b-8f56-4823-9b5f-6a70010f46d9.png" },
+      { name: "McMaster", image: "/lovable-uploads/f620c051-271f-430e-bf14-c10857fd7b77.png" },
+      { name: "TreeHouse", image: "/lovable-uploads/338c24d3-d542-4a2d-a33c-3f0d9bd566e4.png" },
+      { name: "Omnicom Group", image: "/lovable-uploads/55ad11ea-f86e-4ffa-a4f9-10784c34fed2.png" },
+      { name: "Coca-Cola", image: "/lovable-uploads/2ea4814e-bb31-409f-a7ce-9bed1b2d844e.png" },
+      { name: "Google", image: "/lovable-uploads/1951466f-25f1-4795-913b-8e2779e708b9.png" },
+      { name: "Swissport", image: "/lovable-uploads/70e42dc5-1b7c-49c8-a2d2-d0ccea22dbc9.png" }
     ]
   },
   {
