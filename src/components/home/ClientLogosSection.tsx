@@ -60,18 +60,37 @@ const ClientLogosSection = () => {
         {clientGroups.map((group) => (
           <div key={group.title} className="mb-12">
             <h3 className="text-xl font-semibold text-kinetic-copper mb-6 text-center">{group.title}</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-              {group.logos.map((client) => (
-                <Card key={client.name} className="flex items-center justify-center p-4 h-24">
-                  <div className="w-full h-full flex items-center justify-center">
-                    <img 
-                      src={client.image} 
-                      alt={client.name} 
-                      className="max-w-full max-h-full object-contain"
-                    />
+            <div className="overflow-hidden relative">
+              <div className="flex animate-scroll gap-6">
+                {/* First set of logos */}
+                {group.logos.map((client) => (
+                  <div key={client.name} className="flex-shrink-0 w-32 h-24">
+                    <Card className="flex items-center justify-center p-4 h-full">
+                      <div className="w-full h-full flex items-center justify-center">
+                        <img 
+                          src={client.image} 
+                          alt={client.name} 
+                          className="max-w-full max-h-full object-contain"
+                        />
+                      </div>
+                    </Card>
                   </div>
-                </Card>
-              ))}
+                ))}
+                {/* Duplicate set for seamless scrolling */}
+                {group.logos.map((client) => (
+                  <div key={`${client.name}-duplicate`} className="flex-shrink-0 w-32 h-24">
+                    <Card className="flex items-center justify-center p-4 h-full">
+                      <div className="w-full h-full flex items-center justify-center">
+                        <img 
+                          src={client.image} 
+                          alt={client.name} 
+                          className="max-w-full max-h-full object-contain"
+                        />
+                      </div>
+                    </Card>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         ))}
