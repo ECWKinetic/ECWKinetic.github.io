@@ -102,12 +102,21 @@ export default {
 					'100%': {
 						transform: 'translateX(-50%)'
 					}
+				},
+				'scroll-seamless': {
+					'from': {
+						transform: 'translateX(0)'
+					},
+					'to': {
+						transform: 'translateX(calc(-100% / 2))'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'scroll': 'scroll 30s linear infinite'
+				'scroll': 'scroll 30s linear infinite',
+				'scroll-seamless': 'scroll-seamless 40s linear infinite'
 			}
 		}
 	},

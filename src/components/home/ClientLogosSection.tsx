@@ -61,7 +61,7 @@ const ClientLogosSection = () => {
           <div key={group.title} className="mb-12">
             <h3 className="text-xl font-semibold text-kinetic-copper mb-6 text-center">{group.title}</h3>
             <div className="overflow-hidden relative">
-              <div className="flex animate-scroll gap-6">
+              <div className="flex animate-scroll-seamless gap-6">
                 {/* First set of logos */}
                 {group.logos.map((client) => (
                   <div key={client.name} className="flex-shrink-0 w-32 h-24">
