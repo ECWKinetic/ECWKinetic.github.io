@@ -18,10 +18,8 @@
   --chat--transition-duration: 150ms;
 }
 
-/* Hide powered by n8n footer */
-.n8n-chat-widget .chat-footer,
-.n8n-chat-widget [class*="poweredBy"],
-.n8n-chat-widget [class*="footer"] {
+/* Hide only the powered by n8n branding text, not the entire footer */
+.n8n-chat-widget [class*="poweredBy"] {
   display: none !important;
 }
 
