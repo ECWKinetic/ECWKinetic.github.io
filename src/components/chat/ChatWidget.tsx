@@ -144,17 +144,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[500px] h-[600px] flex flex-col p-0">
         <DialogHeader className="px-6 py-4 border-b">
-          <div className="flex items-center justify-between">
-            <DialogTitle>Chat with Kinetic Consulting</DialogTitle>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onClose}
-              className="h-6 w-6"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
+          <DialogTitle>Chat with Kinetic Consulting</DialogTitle>
         </DialogHeader>
 
         <ScrollArea className="flex-1 px-6 py-4" ref={scrollRef}>
