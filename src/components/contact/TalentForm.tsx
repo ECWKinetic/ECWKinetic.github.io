@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -7,7 +7,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import ChatWidget from '@/components/chat/ChatWidget';
 
 const talentFormSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
@@ -21,8 +20,6 @@ const TalentForm = () => {
     resolver: zodResolver(talentFormSchema),
   });
   const { toast } = useToast();
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [formContext, setFormContext] = useState<any>(null);
 
   const onSubmit = async (data: TalentFormData) => {
     let webhookSuccess = false;
@@ -33,7 +30,7 @@ const TalentForm = () => {
                      crypto.randomUUID();
     
     try {
-      const response = await fetch('https://kineticconsulting.app.n8n.cloud/webhook-test/73768bb4-7a6e-4ae4-9b08-d0679279f69f', {
+      const response = await fetch('https://kineticconsulting.app.n8n.cloud/webhook/73768bb4-7a6e-4ae4-9b08-d0679279f69f', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -76,23 +73,24 @@ const TalentForm = () => {
       description: "Thank you for your interest. Someone will be in touch soon.",
     });
     
-    // Open chat modal if webhook was successful
-    if (webhookSuccess) {
-      setFormContext({
-        name: data.name,
-        email: data.email,
-        type: 'candidate',
-        sessionId: sessionId,
+    // Open chat with context if webhook was successful
+    if (webhookSuccess && typeof window !== 'undefined') {
+      const chatEvent = new CustomEvent('openN8nChat', {
+        detail: {
+          name: data.name,
+          email: data.email,
+          type: 'candidate',
+          sessionId: sessionId,
+        }
       });
-      setIsChatOpen(true);
+      window.dispatchEvent(chatEvent);
     }
     
     reset();
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
         <Label htmlFor="talent-name" className="text-white">Name *</Label>
         <Input
@@ -118,16 +116,6 @@ const TalentForm = () => {
         Submit
       </Button>
     </form>
-    
-    {formContext && (
-      <ChatWidget
-        isOpen={isChatOpen}
-        onClose={() => setIsChatOpen(false)}
-        webhookUrl="https://kineticconsulting.app.n8n.cloud/webhook-test/73768bb4-7a6e-4ae4-9b08-d0679279f69f"
-        initialContext={formContext}
-      />
-    )}
-    </>
   );
 };
 
