@@ -1,0 +1,60 @@
+/* Custom styles for n8n chat widget to match website theme */
+
+/* Chat button in corner - use kinetic navy */
+.n8n-chat-widget button[class*="ChatTrigger"] {
+  background-color: #1B2B3A !important;
+  border-color: #1B2B3A !important;
+}
+
+.n8n-chat-widget button[class*="ChatTrigger"]:hover {
+  background-color: #2a3f52 !important;
+}
+
+/* Chat header - use kinetic navy background */
+.n8n-chat-widget [class*="ChatHeader"] {
+  background-color: #1B2B3A !important;
+  color: white !important;
+}
+
+/* Header title customization */
+.n8n-chat-widget [class*="ChatHeader"] [class*="title"] {
+  font-weight: 600 !important;
+}
+
+/* Powered by branding - hide it */
+.n8n-chat-widget [class*="PoweredBy"] {
+  display: none !important;
+}
+
+/* Chat window border */
+.n8n-chat-widget [class*="ChatWindow"] {
+  border-color: #1B2B3A !important;
+}
+
+/* User messages - use kinetic copper accent */
+.n8n-chat-widget [class*="UserMessage"] {
+  background-color: #B87554 !important;
+  color: white !important;
+}
+
+/* Bot messages styling */
+.n8n-chat-widget [class*="BotMessage"] {
+  background-color: #F5F5F5 !important;
+  color: #1B2B3A !important;
+}
+
+/* Input field focus */
+.n8n-chat-widget input:focus,
+.n8n-chat-widget textarea:focus {
+  border-color: #1B2B3A !important;
+  outline-color: #1B2B3A !important;
+}
+
+/* Send button */
+.n8n-chat-widget button[class*="SendButton"] {
+  background-color: #1B2B3A !important;
+}
+
+.n8n-chat-widget button[class*="SendButton"]:hover {
+  background-color: #2a3f52 !important;
+}

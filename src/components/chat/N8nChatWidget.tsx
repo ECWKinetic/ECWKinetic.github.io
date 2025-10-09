@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import '@n8n/chat/style.css';
+import './chat-styles.css';
 import { createChat } from '@n8n/chat';
 
 const N8nChatWidget = () => {
@@ -19,6 +20,9 @@ const N8nChatWidget = () => {
       mode: 'window',
       chatInputKey: 'chatInput',
       chatSessionKey: 'sessionId',
+      initialMessages: [
+        "Hi, I'm Ken - KCP's AI Agent"
+      ],
     });
 
     chatInstanceRef.current = chat;
