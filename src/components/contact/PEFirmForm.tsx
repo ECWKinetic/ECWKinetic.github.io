@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const peFormSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
@@ -38,22 +39,35 @@ const PEFirmForm = () => {
         }),
       });
 
-      if (response.ok) {
-        toast({
-          title: "Request Submitted",
-          description: "Thank you for your interest. We'll be in touch soon.",
-        });
-        reset();
-      } else {
-        throw new Error('Failed to submit');
+      if (!response.ok) {
+        throw new Error('Webhook failed');
       }
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "There was a problem submitting your request. Please try again.",
-        variant: "destructive",
-      });
+      // Webhook failed, send fallback email
+      console.log('Webhook failed, sending fallback email');
+      try {
+        await supabase.functions.invoke('send-fallback-email', {
+          body: {
+            type: 'projectlead',
+            data: {
+              name: data.name,
+              email: data.email,
+              companyName: data.companyName,
+              phone: data.phone || '',
+            },
+          },
+        });
+      } catch (emailError) {
+        console.error('Fallback email also failed:', emailError);
+      }
     }
+
+    // Always show success message to user
+    toast({
+      title: "Request Submitted",
+      description: "Thank you for your interest. Someone will be in touch soon.",
+    });
+    reset();
   };
 
   return (
