@@ -18,13 +18,15 @@ interface ChatWidgetProps {
   onClose: () => void;
   webhookUrl: string;
   initialContext?: Record<string, any>;
+  initialBotMessage?: string | null;
 }
 
 const ChatWidget: React.FC<ChatWidgetProps> = ({ 
   isOpen, 
   onClose, 
   webhookUrl,
-  initialContext = {}
+  initialContext = {},
+  initialBotMessage = null
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -40,10 +42,15 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
 
   useEffect(() => {
     if (isOpen && messages.length === 0) {
-      // Send initial greeting or context to n8n
-      sendInitialMessage();
+      // If there's an initial bot message from n8n, use it
+      if (initialBotMessage) {
+        addBotMessage(initialBotMessage);
+      } else {
+        // Otherwise send initial message to webhook
+        sendInitialMessage();
+      }
     }
-  }, [isOpen]);
+  }, [isOpen, initialBotMessage]);
 
   const sendInitialMessage = async () => {
     try {
