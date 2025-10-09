@@ -1,60 +1,51 @@
 /* Custom styles for n8n chat widget to match website theme */
 
-/* Chat button in corner - use kinetic navy */
-.n8n-chat-widget button[class*="ChatTrigger"] {
+/* Style the chat button - kinetic navy */
+#n8n-chat .chat-button,
+#n8n-chat button[aria-label*="Open"],
+.n8n-chat button {
   background-color: #1B2B3A !important;
-  border-color: #1B2B3A !important;
 }
 
-.n8n-chat-widget button[class*="ChatTrigger"]:hover {
+#n8n-chat .chat-button:hover,
+#n8n-chat button[aria-label*="Open"]:hover {
   background-color: #2a3f52 !important;
 }
 
-/* Chat header - use kinetic navy background */
-.n8n-chat-widget [class*="ChatHeader"] {
+/* Chat window header - kinetic navy */
+#n8n-chat header,
+.n8n-chat header {
   background-color: #1B2B3A !important;
-  color: white !important;
 }
 
-/* Header title customization */
-.n8n-chat-widget [class*="ChatHeader"] [class*="title"] {
-  font-weight: 600 !important;
+/* Make sure the chat input is visible */
+#n8n-chat footer,
+.n8n-chat footer,
+#n8n-chat .chat-input-container,
+.n8n-chat .chat-input-container {
+  display: flex !important;
+  visibility: visible !important;
 }
 
-/* Powered by branding - hide it */
-.n8n-chat-widget [class*="PoweredBy"] {
-  display: none !important;
-}
-
-/* Chat window border */
-.n8n-chat-widget [class*="ChatWindow"] {
-  border-color: #1B2B3A !important;
-}
-
-/* User messages - use kinetic copper accent */
-.n8n-chat-widget [class*="UserMessage"] {
+/* User message bubbles - kinetic copper */
+#n8n-chat .chat-message-from-user,
+.n8n-chat .chat-message-from-user {
   background-color: #B87554 !important;
-  color: white !important;
 }
 
-/* Bot messages styling */
-.n8n-chat-widget [class*="BotMessage"] {
-  background-color: #F5F5F5 !important;
-  color: #1B2B3A !important;
-}
-
-/* Input field focus */
-.n8n-chat-widget input:focus,
-.n8n-chat-widget textarea:focus {
-  border-color: #1B2B3A !important;
-  outline-color: #1B2B3A !important;
-}
-
-/* Send button */
-.n8n-chat-widget button[class*="SendButton"] {
+/* Send button styling */
+#n8n-chat button[type="submit"],
+.n8n-chat button[type="submit"] {
   background-color: #1B2B3A !important;
 }
 
-.n8n-chat-widget button[class*="SendButton"]:hover {
+#n8n-chat button[type="submit"]:hover,
+.n8n-chat button[type="submit"]:hover {
   background-color: #2a3f52 !important;
+}
+
+/* Hide powered by footer */
+#n8n-chat .poweredBy,
+.n8n-chat .poweredBy {
+  display: none !important;
 }

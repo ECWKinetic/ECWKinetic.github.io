@@ -23,6 +23,16 @@ const N8nChatWidget = () => {
       initialMessages: [
         "Hi, I'm Ken - KCP's AI Agent"
       ],
+      i18n: {
+        en: {
+          title: "Hi, I'm Ken - KCP's AI Agent",
+          subtitle: "How can I help you today?",
+          footer: "",
+          getStarted: "Get Started",
+          inputPlaceholder: "Type your message...",
+          closeButtonTooltip: "Close",
+        },
+      },
     });
 
     chatInstanceRef.current = chat;
