@@ -29,6 +29,11 @@ const PEFirmForm = () => {
   const onSubmit = async (data: PEFormData) => {
     let webhookSuccess = false;
     
+    // Get SessionID from localStorage or generate a fallback
+    const sessionId = localStorage.getItem('lovable-session-id') || 
+                     document.cookie.split(';').find(c => c.trim().startsWith('session_id='))?.split('=')[1] ||
+                     crypto.randomUUID();
+    
     try {
       const response = await fetch('https://kineticconsulting.app.n8n.cloud/webhook-test/73768bb4-7a6e-4ae4-9b08-d0679279f69f', {
         method: 'POST',
@@ -41,6 +46,7 @@ const PEFirmForm = () => {
           company_name: data.companyName,
           phone: data.phone || '',
           type: 'projectlead',
+          sessionId: sessionId,
         }),
       });
 
@@ -53,7 +59,7 @@ const PEFirmForm = () => {
       // Webhook failed, send fallback email
       console.log('Webhook failed, sending fallback email');
       try {
-        await supabase.functions.invoke('send-fallback-email', {
+      await supabase.functions.invoke('send-fallback-email', {
           body: {
             type: 'projectlead',
             data: {
@@ -61,6 +67,7 @@ const PEFirmForm = () => {
               email: data.email,
               companyName: data.companyName,
               phone: data.phone || '',
+              sessionId: sessionId,
             },
           },
         });
@@ -83,6 +90,7 @@ const PEFirmForm = () => {
         companyName: data.companyName,
         phone: data.phone || '',
         type: 'projectlead',
+        sessionId: sessionId,
       });
       setIsChatOpen(true);
     }

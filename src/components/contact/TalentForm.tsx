@@ -27,6 +27,11 @@ const TalentForm = () => {
   const onSubmit = async (data: TalentFormData) => {
     let webhookSuccess = false;
     
+    // Get SessionID from localStorage or generate a fallback
+    const sessionId = localStorage.getItem('lovable-session-id') || 
+                     document.cookie.split(';').find(c => c.trim().startsWith('session_id='))?.split('=')[1] ||
+                     crypto.randomUUID();
+    
     try {
       const response = await fetch('https://kineticconsulting.app.n8n.cloud/webhook-test/73768bb4-7a6e-4ae4-9b08-d0679279f69f', {
         method: 'POST',
@@ -37,6 +42,7 @@ const TalentForm = () => {
           candidate_name: data.name,
           email: data.email,
           type: 'candidate',
+          sessionId: sessionId,
         }),
       });
 
@@ -49,12 +55,13 @@ const TalentForm = () => {
       // Webhook failed, send fallback email
       console.log('Webhook failed, sending fallback email');
       try {
-        await supabase.functions.invoke('send-fallback-email', {
+      await supabase.functions.invoke('send-fallback-email', {
           body: {
             type: 'candidate',
             data: {
               name: data.name,
               email: data.email,
+              sessionId: sessionId,
             },
           },
         });
@@ -75,6 +82,7 @@ const TalentForm = () => {
         name: data.name,
         email: data.email,
         type: 'candidate',
+        sessionId: sessionId,
       });
       setIsChatOpen(true);
     }
