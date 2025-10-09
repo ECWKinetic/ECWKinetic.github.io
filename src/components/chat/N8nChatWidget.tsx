@@ -17,7 +17,7 @@ const N8nChatWidget = () => {
         headers: {},
       },
       target: chatRef.current,
-      mode: 'fullscreen',
+      mode: 'window',
       showWelcomeScreen: false,
       chatInputKey: 'chatInput',
       chatSessionKey: 'sessionId',
