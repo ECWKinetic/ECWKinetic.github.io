@@ -23,22 +23,37 @@ const PEFirmForm = () => {
   const { toast } = useToast();
 
   const onSubmit = async (data: PEFormData) => {
-    const subject = encodeURIComponent('PE Firm/Portfolio Company - Talent Request');
-    const body = encodeURIComponent(`
-Name: ${data.name}
-Email: ${data.email}
-Company Name: ${data.companyName}
-Phone: ${data.phone || 'Not provided'}
-    `);
-    
-    window.location.href = `mailto:info@kineticconsultingpartners.com?subject=${subject}&body=${body}`;
-    
-    toast({
-      title: "Request Submitted",
-      description: "Thank you for your interest. We'll be in touch soon.",
-    });
-    
-    reset();
+    try {
+      const response = await fetch('https://kineticconsulting.app.n8n.cloud/webhook-test/73768bb4-7a6e-4ae4-9b08-d0679279f69f', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          client_name: data.name,
+          email: data.email,
+          company_name: data.companyName,
+          phone: data.phone || '',
+          type: 'projectlead',
+        }),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Request Submitted",
+          description: "Thank you for your interest. We'll be in touch soon.",
+        });
+        reset();
+      } else {
+        throw new Error('Failed to submit');
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "There was a problem submitting your request. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (

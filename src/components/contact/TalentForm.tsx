@@ -21,20 +21,35 @@ const TalentForm = () => {
   const { toast } = useToast();
 
   const onSubmit = async (data: TalentFormData) => {
-    const subject = encodeURIComponent('Talent Database - New Candidate');
-    const body = encodeURIComponent(`
-Name: ${data.name}
-Email: ${data.email}
-    `);
-    
-    window.location.href = `mailto:info@kineticconsultingpartners.com?subject=${subject}&body=${body}`;
-    
-    toast({
-      title: "Submission Received",
-      description: "Thank you for your interest. We'll review your information and be in touch.",
-    });
-    
-    reset();
+    try {
+      const response = await fetch('https://kineticconsulting.app.n8n.cloud/webhook-test/73768bb4-7a6e-4ae4-9b08-d0679279f69f', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          candidate_name: data.name,
+          email: data.email,
+          type: 'candidate',
+        }),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Submission Received",
+          description: "Thank you for your interest. We'll review your information and be in touch.",
+        });
+        reset();
+      } else {
+        throw new Error('Failed to submit');
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "There was a problem submitting your request. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
