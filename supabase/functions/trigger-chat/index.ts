@@ -15,14 +15,14 @@ serve(async (req) => {
   try {
     const { secret, context, initialMessage } = await req.json();
 
-    // Optional: Validate secret token for security
-    // const expectedSecret = Deno.env.get('CHAT_TRIGGER_SECRET');
-    // if (secret !== expectedSecret) {
-    //   return new Response(JSON.stringify({ error: 'Invalid secret' }), {
-    //     status: 401,
-    //     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    //   });
-    // }
+    // Validate secret token for security
+    const expectedSecret = Deno.env.get('CHAT_TRIGGER_SECRET');
+    if (secret !== expectedSecret) {
+      return new Response(JSON.stringify({ error: 'Invalid secret' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
     // Initialize Supabase client
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;

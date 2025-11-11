@@ -18,6 +18,15 @@ interface EmailRequest {
   };
 }
 
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -34,18 +43,18 @@ const handler = async (req: Request): Promise<Response> => {
       emailContent = `
         <h2>New Project Lead Submission</h2>
         <p><strong>Note:</strong> This submission was sent via email because the primary webhook failed.</p>
-        <p><strong>Name:</strong> ${data.name || 'N/A'}</p>
-        <p><strong>Email:</strong> ${data.email || 'N/A'}</p>
-        <p><strong>Company Name:</strong> ${data.companyName || 'N/A'}</p>
-        <p><strong>Phone:</strong> ${data.phone || 'N/A'}</p>
+        <p><strong>Name:</strong> ${escapeHtml(data.name || 'N/A')}</p>
+        <p><strong>Email:</strong> ${escapeHtml(data.email || 'N/A')}</p>
+        <p><strong>Company Name:</strong> ${escapeHtml(data.companyName || 'N/A')}</p>
+        <p><strong>Phone:</strong> ${escapeHtml(data.phone || 'N/A')}</p>
       `;
     } else {
       subject = 'New Candidate Submission (Webhook Failed)';
       emailContent = `
         <h2>New Candidate Submission</h2>
         <p><strong>Note:</strong> This submission was sent via email because the primary webhook failed.</p>
-        <p><strong>Name:</strong> ${data.name || 'N/A'}</p>
-        <p><strong>Email:</strong> ${data.email || 'N/A'}</p>
+        <p><strong>Name:</strong> ${escapeHtml(data.name || 'N/A')}</p>
+        <p><strong>Email:</strong> ${escapeHtml(data.email || 'N/A')}</p>
       `;
     }
 
