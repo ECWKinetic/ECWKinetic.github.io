@@ -4,7 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import N8nChatWidget from "@/components/chat/N8nChatWidget";
+import AssistantChatWidget from "@/components/chat/AssistantChatWidget";
 import ScrollToTop from "@/components/ScrollToTop";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -37,7 +37,7 @@ const App = () => {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
-        <N8nChatWidget />
+        <AssistantChatWidget />
       </TooltipProvider>
     </QueryClientProvider>
   );

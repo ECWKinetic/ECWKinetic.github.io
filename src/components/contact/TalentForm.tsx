@@ -22,59 +22,33 @@ const TalentForm = () => {
   const { toast } = useToast();
 
   const onSubmit = async (data: TalentFormData) => {
-    let webhookSuccess = false;
+    // Generate SessionID
+    const sessionId = crypto.randomUUID();
     
-    // Get SessionID from localStorage or generate a fallback
-    const sessionId = localStorage.getItem('lovable-session-id') || 
-                     document.cookie.split(';').find(c => c.trim().startsWith('session_id='))?.split('=')[1] ||
-                     crypto.randomUUID();
-    
+    // Send fallback email (backup in case something fails)
     try {
-      const response = await fetch('https://kineticconsulting.app.n8n.cloud/webhook-test/form-submission', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          candidate_name: data.name,
-          email: data.email,
-          type: 'candidate',
-          sessionId: sessionId,
-        }),
-      });
-
-      if (response.ok) {
-        webhookSuccess = true;
-      } else {
-        throw new Error('Webhook failed');
-      }
-    } catch (error) {
-      // Webhook failed, send fallback email
-      console.log('Webhook failed, sending fallback email');
-      try {
       await supabase.functions.invoke('send-fallback-email', {
-          body: {
-            type: 'candidate',
-            data: {
-              name: data.name,
-              email: data.email,
-              sessionId: sessionId,
-            },
+        body: {
+          type: 'candidate',
+          data: {
+            name: data.name,
+            email: data.email,
+            sessionId: sessionId,
           },
-        });
-      } catch (emailError) {
-        console.error('Fallback email also failed:', emailError);
-      }
+        },
+      });
+    } catch (emailError) {
+      console.error('Fallback email failed:', emailError);
     }
 
-    // Always show success message to user
+    // Show success message to user
     toast({
-      title: "Submission Received",
-      description: "Thank you for your interest. Someone will be in touch soon.",
+      title: "Opening Chat",
+      description: "Let's chat to learn more about your background and interests.",
     });
     
-    // Open chat with context if webhook was successful
-    if (webhookSuccess && typeof window !== 'undefined') {
+    // Always open chat with form data
+    if (typeof window !== 'undefined') {
       const chatEvent = new CustomEvent('openN8nChat', {
         detail: {
           name: data.name,

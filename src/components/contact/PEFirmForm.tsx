@@ -24,70 +24,42 @@ const PEFirmForm = () => {
   const { toast } = useToast();
 
   const onSubmit = async (data: PEFormData) => {
-    let webhookSuccess = false;
+    // Generate SessionID
+    const sessionId = crypto.randomUUID();
     
-    // Get SessionID from localStorage or generate a fallback
-    const sessionId = localStorage.getItem('lovable-session-id') || 
-                     document.cookie.split(';').find(c => c.trim().startsWith('session_id='))?.split('=')[1] ||
-                     crypto.randomUUID();
-    
+    // Send fallback email (backup in case something fails)
     try {
-      const response = await fetch('https://kineticconsulting.app.n8n.cloud/webhook-test/form-submission', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          client_name: data.name,
-          email: data.email,
-          company_name: data.companyName,
-          phone: data.phone || '',
-          type: 'projectlead',
-          sessionId: sessionId,
-        }),
-      });
-
-      if (response.ok) {
-        webhookSuccess = true;
-      } else {
-        throw new Error('Webhook failed');
-      }
-    } catch (error) {
-      // Webhook failed, send fallback email
-      console.log('Webhook failed, sending fallback email');
-      try {
       await supabase.functions.invoke('send-fallback-email', {
-          body: {
-            type: 'projectlead',
-            data: {
-              name: data.name,
-              email: data.email,
-              companyName: data.companyName,
-              phone: data.phone || '',
-              sessionId: sessionId,
-            },
+        body: {
+          type: 'projectlead',
+          data: {
+            name: data.name,
+            email: data.email,
+            companyName: data.companyName,
+            phone: data.phone || '',
+            sessionId: sessionId,
           },
-        });
-      } catch (emailError) {
-        console.error('Fallback email also failed:', emailError);
-      }
+        },
+      });
+    } catch (emailError) {
+      console.error('Fallback email failed:', emailError);
     }
 
-    // Always show success message to user
+    // Show success message to user
     toast({
-      title: "Request Submitted",
-      description: "Thank you for your interest. Someone will be in touch soon.",
+      title: "Opening Chat",
+      description: "Let's discuss your project needs in more detail.",
     });
     
-    // Open chat with context if webhook was successful
-    if (webhookSuccess && typeof window !== 'undefined') {
+    // Always open chat with form data
+    if (typeof window !== 'undefined') {
       const chatEvent = new CustomEvent('openN8nChat', {
         detail: {
           name: data.name,
           email: data.email,
           companyName: data.companyName,
           phone: data.phone,
-          type: 'client',
+          type: 'projectlead',
           sessionId: sessionId,
         }
       });
