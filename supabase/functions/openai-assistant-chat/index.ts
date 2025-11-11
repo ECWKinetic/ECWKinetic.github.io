@@ -8,7 +8,7 @@ const corsHeaders = {
 
 const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
 const ASSISTANT_ID = 'asst_GvoIu1KSLelzuajXVLqFwuZz';
-const N8N_WEBHOOK_URL = 'https://kineticconsulting.app.n8n.cloud/webhook-test/assistant-completion';
+const N8N_WEBHOOK_URL = 'https://kineticconsulting.app.n8n.cloud/webhook-test/form-submission';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -26,11 +26,15 @@ interface FormData {
 }
 
 interface RequestBody {
-  action: 'start' | 'message' | 'close' | 'timeout';
+  action: 'start' | 'message' | 'close' | 'timeout' | 'upload_file';
   threadId?: string;
   message?: string;
   formData: FormData;
   messageCount?: number;
+  fileData?: string;
+  fileName?: string;
+  fileType?: string;
+  fileIds?: string[];
 }
 
 serve(async (req) => {
@@ -44,9 +48,73 @@ serve(async (req) => {
     }
 
     const body: RequestBody = await req.json();
-    const { action, threadId, message, formData, messageCount = 0 } = body;
+    const { action, threadId, message, formData, messageCount = 0, fileData, fileName, fileType, fileIds } = body;
 
     console.log('OpenAI Assistant Chat - Action:', action, 'ThreadID:', threadId);
+
+    // Handle file upload
+    if (action === 'upload_file') {
+      if (!fileData || !fileName) {
+        return new Response(
+          JSON.stringify({ error: 'File data and name are required' }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
+        );
+      }
+
+      try {
+        // Decode base64 file data
+        const base64Data = fileData.split(',')[1] || fileData;
+        const buffer = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
+        
+        // Create a File-like object for OpenAI
+        const file = new File([buffer], fileName, { type: fileType || 'application/octet-stream' });
+
+        // Upload to OpenAI
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('purpose', 'assistants');
+
+        const uploadResponse = await fetch('https://api.openai.com/v1/files', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${OPENAI_API_KEY}`,
+          },
+          body: formData,
+        });
+
+        if (!uploadResponse.ok) {
+          const error = await uploadResponse.text();
+          console.error('Failed to upload file to OpenAI:', error);
+          throw new Error('Failed to upload file');
+        }
+
+        const uploadData = await uploadResponse.json();
+        console.log('File uploaded to OpenAI:', uploadData.id);
+
+        return new Response(
+          JSON.stringify({ 
+            fileId: uploadData.id,
+            fileName: fileName,
+            success: true 
+          }),
+          {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
+        );
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        return new Response(
+          JSON.stringify({ error: 'Failed to upload file' }),
+          {
+            status: 500,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
+        );
+      }
+    }
 
     // Handle completion triggers (close or timeout)
     if (action === 'close' || action === 'timeout') {
@@ -102,6 +170,19 @@ serve(async (req) => {
 
     // Add user message to thread
     if (message) {
+      const messageBody: any = {
+        role: 'user',
+        content: message,
+      };
+
+      // Add file attachments if provided
+      if (fileIds && fileIds.length > 0) {
+        messageBody.attachments = fileIds.map(fileId => ({
+          file_id: fileId,
+          tools: [{ type: 'file_search' }]
+        }));
+      }
+
       const addMessageResponse = await fetch(
         `https://api.openai.com/v1/threads/${currentThreadId}/messages`,
         {
@@ -111,10 +192,7 @@ serve(async (req) => {
             'Content-Type': 'application/json',
             'OpenAI-Beta': 'assistants=v2',
           },
-          body: JSON.stringify({
-            role: 'user',
-            content: message,
-          }),
+          body: JSON.stringify(messageBody),
         }
       );
 

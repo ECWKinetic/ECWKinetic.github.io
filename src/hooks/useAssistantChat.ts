@@ -6,6 +6,12 @@ export interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
   timestamp: string;
+  files?: Array<{ id: string; name: string }>;
+}
+
+export interface UploadedFile {
+  id: string;
+  name: string;
 }
 
 export interface FormData {
@@ -23,6 +29,7 @@ export const useAssistantChat = (formData: FormData) => {
   const [threadId, setThreadId] = useState<string | null>(null);
   const [isCompleted, setIsCompleted] = useState(false);
   const [lastActivityTime, setLastActivityTime] = useState(Date.now());
+  const [uploadingFiles, setUploadingFiles] = useState(false);
   const messageCountRef = useRef(0);
 
   // 5-minute inactivity timeout
@@ -42,7 +49,40 @@ export const useAssistantChat = (formData: FormData) => {
     return () => clearInterval(checkInactivity);
   }, [lastActivityTime, isCompleted, messages.length]);
 
-  const sendMessage = useCallback(async (content: string) => {
+  const uploadFile = useCallback(async (file: File): Promise<UploadedFile> => {
+    setUploadingFiles(true);
+    try {
+      const fileReader = new FileReader();
+      const base64Promise = new Promise<string>((resolve, reject) => {
+        fileReader.onload = () => resolve(fileReader.result as string);
+        fileReader.onerror = reject;
+        fileReader.readAsDataURL(file);
+      });
+
+      const base64Data = await base64Promise;
+
+      const { data, error } = await supabase.functions.invoke('openai-assistant-chat', {
+        body: {
+          action: 'upload_file',
+          fileData: base64Data,
+          fileName: file.name,
+          fileType: file.type,
+          formData,
+        },
+      });
+
+      if (error) throw error;
+
+      return {
+        id: data.fileId,
+        name: data.fileName,
+      };
+    } finally {
+      setUploadingFiles(false);
+    }
+  }, [formData]);
+
+  const sendMessage = useCallback(async (content: string, fileIds?: string[], files?: UploadedFile[]) => {
     if (isCompleted) return;
 
     // Add user message to UI
@@ -51,6 +91,7 @@ export const useAssistantChat = (formData: FormData) => {
       role: 'user',
       content,
       timestamp: new Date().toISOString(),
+      files: files,
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -66,6 +107,7 @@ export const useAssistantChat = (formData: FormData) => {
           message: content,
           formData,
           messageCount: messageCountRef.current,
+          fileIds: fileIds || [],
         },
       });
 
@@ -198,7 +240,9 @@ export const useAssistantChat = (formData: FormData) => {
     messages,
     isLoading,
     isCompleted,
+    uploadingFiles,
     sendMessage,
+    uploadFile,
     startConversation,
     handleClose,
   };

@@ -1,23 +1,30 @@
 import { useEffect, useState, useRef } from 'react';
-import { X, Minimize2, Send, Loader2 } from 'lucide-react';
+import { X, Minimize2, Send, Loader2, Paperclip, FileText, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { useAssistantChat, FormData } from '@/hooks/useAssistantChat';
-import { formatTimestamp } from '@/utils/assistantChatHelpers';
+import { useAssistantChat, FormData, UploadedFile } from '@/hooks/useAssistantChat';
+import { formatTimestamp, validateFileType, validateFileSize, formatFileSize } from '@/utils/assistantChatHelpers';
+import { useToast } from '@/hooks/use-toast';
 
 const AssistantChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [formData, setFormData] = useState<FormData | null>(null);
   const [inputValue, setInputValue] = useState('');
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
 
   const {
     messages,
     isLoading,
     isCompleted,
+    uploadingFiles,
     sendMessage,
+    uploadFile,
     startConversation,
     handleClose,
   } = useAssistantChat(formData || {
@@ -82,11 +89,68 @@ const AssistantChatWidget = () => {
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [isOpen, isCompleted, handleClose]);
 
-  const handleSendMessage = () => {
-    if (!inputValue.trim() || isLoading || isCompleted) return;
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    
+    const validFiles: File[] = [];
+    for (const file of files) {
+      if (!validateFileType(file)) {
+        toast({
+          title: "Unsupported file type",
+          description: `${file.name} is not a supported file type. Please use PDF, DOC, DOCX, TXT, MD, JSON, or CSV.`,
+          variant: "destructive",
+        });
+        continue;
+      }
+      
+      if (!validateFileSize(file)) {
+        toast({
+          title: "File too large",
+          description: `${file.name} exceeds the 20MB limit.`,
+          variant: "destructive",
+        });
+        continue;
+      }
+      
+      validFiles.push(file);
+    }
+    
+    setSelectedFiles(prev => [...prev, ...validFiles]);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
-    sendMessage(inputValue);
-    setInputValue('');
+  const handleRemoveFile = (index: number) => {
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleSendMessage = async () => {
+    if ((!inputValue.trim() && selectedFiles.length === 0) || isLoading || isCompleted || uploadingFiles) return;
+
+    try {
+      // Upload files first if any
+      const fileIds: string[] = [];
+      const files: UploadedFile[] = [];
+      
+      for (const file of selectedFiles) {
+        const uploaded = await uploadFile(file);
+        fileIds.push(uploaded.id);
+        files.push(uploaded);
+      }
+
+      // Send message with file IDs
+      await sendMessage(inputValue || '(attached files)', fileIds, files);
+      setInputValue('');
+      setSelectedFiles([]);
+      setUploadedFiles([]);
+    } catch (error) {
+      toast({
+        title: "Upload failed",
+        description: "Failed to upload files. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleCloseChat = () => {
@@ -147,7 +211,7 @@ const AssistantChatWidget = () => {
                       message.role === 'user' ? 'justify-end' : 'justify-start'
                     }`}
                   >
-                    <div
+                     <div
                       className={`max-w-[80%] rounded-lg p-3 ${
                         message.role === 'user'
                           ? 'bg-kinetic-navy text-white'
@@ -155,6 +219,16 @@ const AssistantChatWidget = () => {
                       }`}
                     >
                       <p className="text-sm whitespace-pre-wrap break-words">{message.content}</p>
+                      {message.files && message.files.length > 0 && (
+                        <div className="mt-2 space-y-1">
+                          {message.files.map((file, idx) => (
+                            <div key={idx} className="flex items-center gap-1 text-xs opacity-90">
+                              <FileText className="w-3 h-3" />
+                              <span>{file.name}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                       <span className="text-xs opacity-70 mt-1 block">
                         {formatTimestamp(message.timestamp)}
                       </span>
@@ -183,22 +257,64 @@ const AssistantChatWidget = () => {
             {/* Input Area */}
             <div className="border-t border-gray-200 p-4">
               {!isCompleted ? (
-                <div className="flex gap-2">
-                  <Input
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    placeholder="Type your message..."
-                    disabled={isLoading}
-                    className="flex-1"
-                  />
-                  <Button
-                    onClick={handleSendMessage}
-                    disabled={isLoading || !inputValue.trim()}
-                    className="bg-kinetic-navy hover:bg-kinetic-navy/90"
-                  >
-                    <Send className="w-4 h-4" />
-                  </Button>
+                <div className="space-y-2">
+                  {/* Selected Files Preview */}
+                  {selectedFiles.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {selectedFiles.map((file, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center gap-2 bg-gray-100 rounded px-2 py-1 text-xs"
+                        >
+                          <FileText className="w-3 h-3" />
+                          <span className="max-w-[120px] truncate">{file.name}</span>
+                          <span className="text-gray-500">({formatFileSize(file.size)})</span>
+                          <button
+                            onClick={() => handleRemoveFile(index)}
+                            className="hover:text-red-600"
+                          >
+                            <XCircle className="w-3 h-3" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Message Input */}
+                  <div className="flex gap-2">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      multiple
+                      accept=".pdf,.doc,.docx,.txt,.md,.json,.csv"
+                      onChange={handleFileSelect}
+                      className="hidden"
+                    />
+                    <Button
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={isLoading || uploadingFiles}
+                      variant="outline"
+                      size="icon"
+                      className="shrink-0"
+                    >
+                      <Paperclip className="w-4 h-4" />
+                    </Button>
+                    <Input
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                      placeholder="Type your message..."
+                      disabled={isLoading || uploadingFiles}
+                      className="flex-1"
+                    />
+                    <Button
+                      onClick={handleSendMessage}
+                      disabled={isLoading || uploadingFiles || (!inputValue.trim() && selectedFiles.length === 0)}
+                      className="bg-kinetic-navy hover:bg-kinetic-navy/90"
+                    >
+                      {uploadingFiles ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                    </Button>
+                  </div>
                 </div>
               ) : (
                 <Button
