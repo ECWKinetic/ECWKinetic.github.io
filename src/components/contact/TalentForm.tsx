@@ -41,12 +41,6 @@ const TalentForm = () => {
       console.error('Fallback email failed:', emailError);
     }
 
-    // Show success message to user
-    toast({
-      title: "Opening Chat",
-      description: "Let's chat to learn more about your background and interests.",
-    });
-    
     // Always open chat with form data
     if (typeof window !== 'undefined') {
       const chatEvent = new CustomEvent('openN8nChat', {
