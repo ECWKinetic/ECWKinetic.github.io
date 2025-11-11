@@ -51,6 +51,7 @@ serve(async (req) => {
     const { action, threadId, message, formData, messageCount = 0, fileData, fileName, fileType, fileIds } = body;
 
     console.log('OpenAI Assistant Chat - Action:', action, 'ThreadID:', threadId);
+    console.log('Received fileIds:', fileIds);
 
     // Handle file upload
     if (action === 'upload_file') {
@@ -177,10 +178,12 @@ serve(async (req) => {
 
       // Add file attachments if provided
       if (fileIds && fileIds.length > 0) {
+        console.log('Attaching files to message:', fileIds);
         messageBody.attachments = fileIds.map(fileId => ({
           file_id: fileId,
           tools: [{ type: 'file_search' }]
         }));
+        console.log('Message body with attachments:', JSON.stringify(messageBody, null, 2));
       }
 
       const addMessageResponse = await fetch(
@@ -203,6 +206,9 @@ serve(async (req) => {
       }
 
       console.log('Added user message to thread');
+      if (fileIds && fileIds.length > 0) {
+        console.log('Message sent with file attachments:', fileIds);
+      }
     }
 
     // Run the assistant

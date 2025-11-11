@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { X, Minimize2, Send, Loader2, Paperclip, FileText, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAssistantChat, FormData, UploadedFile } from '@/hooks/useAssistantChat';
 import { formatTimestamp, validateFileType, validateFileSize, formatFileSize } from '@/utils/assistantChatHelpers';
@@ -164,6 +164,7 @@ const AssistantChatWidget = () => {
       e.preventDefault();
       handleSendMessage();
     }
+    // Shift+Enter will naturally create new lines in textarea
   };
 
   if (!isOpen) return null;
@@ -171,7 +172,7 @@ const AssistantChatWidget = () => {
   return (
     <div
       className={`fixed bottom-4 right-4 z-50 transition-all duration-300 ${
-        isMinimized ? 'w-80 h-14' : 'w-96 h-[600px]'
+        isMinimized ? 'w-80 h-14' : 'w-[576px] h-[600px]'
       }`}
     >
       <div className="bg-white rounded-lg shadow-2xl border border-gray-200 flex flex-col h-full overflow-hidden">
@@ -299,13 +300,14 @@ const AssistantChatWidget = () => {
                     >
                       <Paperclip className="w-4 h-4" />
                     </Button>
-                    <Input
+                    <Textarea
                       value={inputValue}
                       onChange={(e) => setInputValue(e.target.value)}
-                      onKeyPress={handleKeyPress}
+                      onKeyDown={handleKeyPress}
                       placeholder="Type your message..."
                       disabled={isLoading || uploadingFiles}
-                      className="flex-1"
+                      className="flex-1 min-h-[60px] max-h-[120px] resize-none"
+                      rows={2}
                     />
                     <Button
                       onClick={handleSendMessage}
