@@ -1,9 +1,9 @@
-
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import KineticLogo from '../brand/KineticLogo';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -76,6 +76,7 @@ interface NavLinksProps {
 }
 
 const NavLinks = ({ isMobile, onItemClick, onNavigate }: NavLinksProps) => {
+  const { user, profile } = useAuth();
   const links = [
     { name: 'Home', id: 'home' },
     { name: 'Value Creation', id: 'value-creation' },
@@ -105,6 +106,25 @@ const NavLinks = ({ isMobile, onItemClick, onNavigate }: NavLinksProps) => {
           {link.name}
         </a>
       ))}
+      {user && profile ? (
+        <Link to={profile.user_type === 'talent' ? '/talent-network' : '/project-brief'}>
+          <Button 
+            variant="outline"
+            className={isMobile ? 'w-full' : ''}
+          >
+            Dashboard
+          </Button>
+        </Link>
+      ) : (
+        <Link to="/login">
+          <Button 
+            variant="outline"
+            className={isMobile ? 'w-full' : ''}
+          >
+            Login
+          </Button>
+        </Link>
+      )}
       <Button 
         style={{ backgroundColor: '#379392' }}
         className="text-white hover:bg-opacity-90"
