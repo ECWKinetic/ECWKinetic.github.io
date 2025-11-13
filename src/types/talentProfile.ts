@@ -33,7 +33,17 @@ export interface TalentProfileData {
   // Step 9: Functional Expertise
   functional_expertise: string[];
 
-  // Step 10: Availability & Preferences
+  // Step 10: Consulting & PE Experience
+  consulting_firms: string[];
+  consulting_firms_other: string | null;
+  consulting_years_experience: number | null;
+  consulting_highest_title: string | null;
+  pe_portfolio_years: number | null;
+  pe_board_experience: string | null;
+  pe_engagement_types: string[];
+  pe_portfolio_experience_description: string | null;
+
+  // Step 11: Availability & Preferences
   availability: string | null;
   experience_years: number | null;
   preferred_engagement: string[];
@@ -112,4 +122,35 @@ export const ENGAGEMENT_OPTIONS = [
   'Strategic Advisor',
   'Full-time Executive',
   'Project-based Consulting',
+];
+
+export const CONSULTING_FIRMS_OPTIONS = [
+  'Alvarez & Marsal (A&M)',
+  'AlixPartners',
+  'Bain & Company',
+  'Berkeley Research Group (BRG)',
+  'Boston Consulting Group (BCG)',
+  'Deloitte',
+  'EY (Ernst & Young)',
+  'FTI Consulting',
+  'Kearney',
+  'KPMG',
+  'LEK Consulting',
+  'McKinsey & Company',
+  'OC&C Strategy Consultants',
+  'Oliver Wyman',
+  'PwC (beyond Strategy&)',
+  'Roland Berger',
+  'Strategy& (PwC)',
+  'Other',
+];
+
+export const PE_ENGAGEMENT_OPTIONS = [
+  'Interim Executive',
+  'Operating Partner',
+  'Board Member',
+  'Strategic Advisor',
+  'Portfolio Company CEO/C-Suite',
+  'Transformation Leader',
+  'Value Creation Consultant',
 ];

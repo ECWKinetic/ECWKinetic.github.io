@@ -4,12 +4,12 @@ import { Separator } from '@/components/ui/separator';
 import { TalentProfileData } from '@/types/talentProfile';
 import { format } from 'date-fns';
 
-interface Step11ReviewProps {
+interface Step12ReviewProps {
   data: TalentProfileData;
   onEditStep: (step: number) => void;
 }
 
-export const Step11Review = ({ data, onEditStep }: Step11ReviewProps) => {
+export const Step12Review = ({ data, onEditStep }: Step12ReviewProps) => {
   const EditButton = ({ step }: { step: number }) => (
     <button
       type="button"
@@ -180,11 +180,50 @@ export const Step11Review = ({ data, onEditStep }: Step11ReviewProps) => {
             </>
           )}
 
+          {/* Consulting & PE Experience */}
+          {(data.consulting_firms?.length > 0 || data.pe_portfolio_years || data.pe_board_experience) && (
+            <>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold">Consulting & Private Equity Experience</h3>
+                  <EditButton step={10} />
+                </div>
+                <div className="bg-muted/30 rounded-lg p-4 space-y-2 text-sm">
+                  {data.consulting_firms && data.consulting_firms.length > 0 && (
+                    <div>
+                      <p className="font-medium mb-2">Consulting Firms:</p>
+                      <div className="flex flex-wrap gap-2">
+                        {data.consulting_firms.map((firm, i) => (
+                          <Badge key={i} variant="secondary">{firm}</Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {data.consulting_years_experience && <p><strong>Consulting Experience:</strong> {data.consulting_years_experience} years</p>}
+                  {data.consulting_highest_title && <p><strong>Highest Consulting Title:</strong> {data.consulting_highest_title}</p>}
+                  {data.pe_portfolio_years && <p><strong>PE Portfolio Years:</strong> {data.pe_portfolio_years}</p>}
+                  {data.pe_board_experience && <p><strong>Board Experience:</strong> {data.pe_board_experience}</p>}
+                  {data.pe_engagement_types && data.pe_engagement_types.length > 0 && (
+                    <div>
+                      <p className="font-medium mb-2">PE Engagement Types:</p>
+                      <div className="flex flex-wrap gap-2">
+                        {data.pe_engagement_types.map((type, i) => (
+                          <Badge key={i} variant="outline">{type}</Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <Separator />
+            </>
+          )}
+
           {/* Availability */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold">Availability & Preferences</h3>
-              <EditButton step={10} />
+              <EditButton step={11} />
             </div>
             <div className="bg-muted/30 rounded-lg p-4 space-y-2 text-sm">
               {data.experience_years && <p><strong>Experience:</strong> {data.experience_years} years</p>}

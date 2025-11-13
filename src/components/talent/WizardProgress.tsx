@@ -5,9 +5,10 @@ interface WizardProgressProps {
   currentStep: number;
   totalSteps: number;
   stepTitles: string[];
+  onStepClick?: (step: number) => void;
 }
 
-export const WizardProgress = ({ currentStep, totalSteps, stepTitles }: WizardProgressProps) => {
+export const WizardProgress = ({ currentStep, totalSteps, stepTitles, onStepClick }: WizardProgressProps) => {
   return (
     <div className="mb-8">
       {/* Progress bar */}
@@ -27,13 +28,19 @@ export const WizardProgress = ({ currentStep, totalSteps, stepTitles }: WizardPr
             const isCurrent = stepNumber === currentStep;
 
             return (
-              <div key={stepNumber} className="flex flex-col items-center">
+              <button
+                key={stepNumber}
+                onClick={() => onStepClick?.(stepNumber)}
+                disabled={!onStepClick}
+                className="flex flex-col items-center disabled:cursor-default group"
+              >
                 <div
                   className={cn(
                     "w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-colors",
                     isCompleted && "bg-primary text-primary-foreground",
                     isCurrent && "bg-primary text-primary-foreground ring-4 ring-primary/20",
-                    !isCompleted && !isCurrent && "bg-muted text-muted-foreground"
+                    !isCompleted && !isCurrent && "bg-muted text-muted-foreground",
+                    onStepClick && "group-hover:ring-4 group-hover:ring-primary/20 cursor-pointer"
                   )}
                 >
                   {isCompleted ? <Check className="w-5 h-5" /> : stepNumber}
@@ -44,7 +51,7 @@ export const WizardProgress = ({ currentStep, totalSteps, stepTitles }: WizardPr
                 )}>
                   {title}
                 </span>
-              </div>
+              </button>
             );
           })}
         </div>

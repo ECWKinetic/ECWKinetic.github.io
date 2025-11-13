@@ -417,6 +417,10 @@ export type Database = {
           bio: string | null
           board_experience: string | null
           certifications: string[] | null
+          consulting_firms: string[] | null
+          consulting_firms_other: string | null
+          consulting_highest_title: string | null
+          consulting_years_experience: number | null
           created_at: string | null
           current_company: string | null
           current_location: string | null
@@ -448,7 +452,11 @@ export type Database = {
           location: string | null
           max_travel_percentage: number | null
           open_to_travel: string | null
+          pe_board_experience: string | null
+          pe_engagement_types: string[] | null
           pe_portfolio_experience: string | null
+          pe_portfolio_experience_description: string | null
+          pe_portfolio_years: number | null
           phone: string | null
           preferred_company_stage: string[] | null
           preferred_engagement: string[] | null
@@ -480,6 +488,10 @@ export type Database = {
           bio?: string | null
           board_experience?: string | null
           certifications?: string[] | null
+          consulting_firms?: string[] | null
+          consulting_firms_other?: string | null
+          consulting_highest_title?: string | null
+          consulting_years_experience?: number | null
           created_at?: string | null
           current_company?: string | null
           current_location?: string | null
@@ -511,7 +523,11 @@ export type Database = {
           location?: string | null
           max_travel_percentage?: number | null
           open_to_travel?: string | null
+          pe_board_experience?: string | null
+          pe_engagement_types?: string[] | null
           pe_portfolio_experience?: string | null
+          pe_portfolio_experience_description?: string | null
+          pe_portfolio_years?: number | null
           phone?: string | null
           preferred_company_stage?: string[] | null
           preferred_engagement?: string[] | null
@@ -543,6 +559,10 @@ export type Database = {
           bio?: string | null
           board_experience?: string | null
           certifications?: string[] | null
+          consulting_firms?: string[] | null
+          consulting_firms_other?: string | null
+          consulting_highest_title?: string | null
+          consulting_years_experience?: number | null
           created_at?: string | null
           current_company?: string | null
           current_location?: string | null
@@ -574,7 +594,11 @@ export type Database = {
           location?: string | null
           max_travel_percentage?: number | null
           open_to_travel?: string | null
+          pe_board_experience?: string | null
+          pe_engagement_types?: string[] | null
           pe_portfolio_experience?: string | null
+          pe_portfolio_experience_description?: string | null
+          pe_portfolio_years?: number | null
           phone?: string | null
           preferred_company_stage?: string[] | null
           preferred_engagement?: string[] | null

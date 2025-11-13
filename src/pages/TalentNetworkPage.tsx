@@ -15,8 +15,9 @@ import { Step6Skills } from '@/components/talent/wizard/Step6Skills';
 import { Step7Certifications } from '@/components/talent/wizard/Step7Certifications';
 import { Step8Industry } from '@/components/talent/wizard/Step8Industry';
 import { Step9Functional } from '@/components/talent/wizard/Step9Functional';
-import { Step10Availability } from '@/components/talent/wizard/Step10Availability';
-import { Step11Review } from '@/components/talent/wizard/Step11Review';
+import { Step10ConsultingPE } from '@/components/talent/wizard/Step10ConsultingPE';
+import { Step11Availability } from '@/components/talent/wizard/Step11Availability';
+import { Step12Review } from '@/components/talent/wizard/Step12Review';
 import { TalentProfileData, SKILLS_OPTIONS, INDUSTRY_OPTIONS, FUNCTIONAL_EXPERTISE_OPTIONS } from '@/types/talentProfile';
 import { normalizeRepeaterData } from '@/lib/repeaterUtils';
 import { normalizeSelectOptions } from '@/lib/utils';
@@ -31,6 +32,7 @@ const STEP_TITLES = [
   'Certifications',
   'Industry',
   'Functional',
+  'Consulting & PE',
   'Availability',
   'Review',
 ];
@@ -43,6 +45,7 @@ export default function TalentNetworkPage() {
   const [saving, setSaving] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [aiFilledData, setAiFilledData] = useState<any>(null);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   
   const [formData, setFormData] = useState<TalentProfileData>({
     id: undefined,
@@ -58,6 +61,14 @@ export default function TalentNetworkPage() {
     certifications: [],
     industry_experience: [],
     functional_expertise: [],
+    consulting_firms: [],
+    consulting_firms_other: null,
+    consulting_years_experience: null,
+    consulting_highest_title: null,
+    pe_portfolio_years: null,
+    pe_board_experience: null,
+    pe_engagement_types: [],
+    pe_portfolio_experience_description: null,
     availability: null,
     experience_years: null,
     preferred_engagement: [],
@@ -73,13 +84,14 @@ export default function TalentNetworkPage() {
     try {
       const { data, error } = await supabase
         .from('talent_profiles')
-        .select('*')
+        .select('*, updated_at')
         .eq('user_id', user.id)
         .maybeSingle();
 
       if (error && error.code !== 'PGRST116') throw error;
 
       if (data) {
+        setLastUpdated(data.updated_at ? new Date(data.updated_at) : null);
         setFormData({
           id: data.id,
           full_name: data.full_name || profile?.full_name || '',
@@ -94,6 +106,14 @@ export default function TalentNetworkPage() {
           certifications: Array.isArray(data.certifications) ? data.certifications : [],
           industry_experience: normalizeSelectOptions(data.industry_experience, INDUSTRY_OPTIONS),
           functional_expertise: normalizeSelectOptions(data.functional_expertise, FUNCTIONAL_EXPERTISE_OPTIONS),
+          consulting_firms: Array.isArray(data.consulting_firms) ? data.consulting_firms : [],
+          consulting_firms_other: data.consulting_firms_other,
+          consulting_years_experience: data.consulting_years_experience,
+          consulting_highest_title: data.consulting_highest_title,
+          pe_portfolio_years: data.pe_portfolio_years,
+          pe_board_experience: data.pe_board_experience,
+          pe_engagement_types: Array.isArray(data.pe_engagement_types) ? data.pe_engagement_types : [],
+          pe_portfolio_experience_description: data.pe_portfolio_experience_description,
           availability: data.availability,
           experience_years: data.experience_years,
           preferred_engagement: Array.isArray(data.preferred_engagement) ? data.preferred_engagement : [],
@@ -154,6 +174,14 @@ export default function TalentNetworkPage() {
         certifications: formData.certifications.filter(c => c.trim()),
         industry_experience: normalizeSelectOptions(formData.industry_experience, INDUSTRY_OPTIONS),
         functional_expertise: normalizeSelectOptions(formData.functional_expertise, FUNCTIONAL_EXPERTISE_OPTIONS),
+        consulting_firms: formData.consulting_firms,
+        consulting_firms_other: formData.consulting_firms_other,
+        consulting_years_experience: formData.consulting_years_experience,
+        consulting_highest_title: formData.consulting_highest_title,
+        pe_portfolio_years: formData.pe_portfolio_years,
+        pe_board_experience: formData.pe_board_experience,
+        pe_engagement_types: formData.pe_engagement_types,
+        pe_portfolio_experience_description: formData.pe_portfolio_experience_description,
         availability: formData.availability,
         experience_years: formData.experience_years,
         preferred_engagement: formData.preferred_engagement,
@@ -169,11 +197,11 @@ export default function TalentNetworkPage() {
       if (showToast) {
         toast({
           title: 'Success',
-          description: currentStep === 11 ? 'Your profile has been submitted!' : 'Your progress has been saved',
+          description: currentStep === 12 ? 'Your profile has been submitted!' : 'Your progress has been saved',
         });
       }
 
-      if (currentStep === 11) {
+      if (currentStep === 12) {
         navigate('/');
       }
     } catch (error: any) {
@@ -188,10 +216,10 @@ export default function TalentNetworkPage() {
   };
 
   const handleNext = async () => {
-    if (currentStep === 11) {
+    if (currentStep === 12) {
       await handleSave();
     } else {
-      setCurrentStep(prev => Math.min(prev + 1, 11));
+      setCurrentStep(prev => Math.min(prev + 1, 12));
     }
   };
 
@@ -249,12 +277,48 @@ export default function TalentNetworkPage() {
       case 9:
         return <Step9Functional data={formData} onChange={updateFormData} aiFilledOptions={getAiFilledOptions('functional_expertise')} />;
       case 10:
-        return <Step10Availability data={formData} onChange={updateFormData} />;
+        return <Step10ConsultingPE data={formData} onChange={updateFormData} />;
       case 11:
-        return <Step11Review data={formData} onEditStep={goToStep} />;
+        return <Step11Availability data={formData} onChange={updateFormData} />;
+      case 12:
+        return <Step12Review data={formData} onEditStep={goToStep} />;
       default:
         return null;
     }
+  };
+
+  const getLastUpdatedMessage = () => {
+    if (!formData.id && !lastUpdated) {
+      return (
+        <div className="bg-muted/50 rounded-lg p-4 mb-6">
+          <p className="text-sm text-muted-foreground">
+            <strong>Welcome!</strong> Complete your profile to join our talent network.
+            {currentStep === 1 && " You don't need to upload your resume - you can fill out all sections manually if you prefer."}
+          </p>
+        </div>
+      );
+    }
+
+    const getDaysAgo = () => {
+      if (!lastUpdated) return '';
+      const now = new Date();
+      const diffTime = Math.abs(now.getTime() - lastUpdated.getTime());
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      
+      if (diffDays === 0) return 'today';
+      if (diffDays === 1) return '1 day ago';
+      return `${diffDays} days ago`;
+    };
+    
+    return (
+      <div className="bg-muted/50 rounded-lg p-4 mb-6">
+        <p className="text-sm text-muted-foreground">
+          {lastUpdated && <><strong>Last updated:</strong> {getDaysAgo()}. </>}
+          You can update your profile information at any time.
+          {currentStep === 1 && " You don't need to upload your resume again - you can fill out all sections manually."}
+        </p>
+      </div>
+    );
   };
 
   return (
@@ -266,17 +330,20 @@ export default function TalentNetworkPage() {
       />
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
+        {getLastUpdatedMessage()}
+        
         <WizardProgress 
           currentStep={currentStep} 
-          totalSteps={11} 
+          totalSteps={12} 
           stepTitles={STEP_TITLES}
+          onStepClick={goToStep}
         />
 
         {renderStep()}
 
         <WizardNavigation
           currentStep={currentStep}
-          totalSteps={11}
+          totalSteps={12}
           onPrevious={handlePrevious}
           onNext={handleNext}
           onSaveAndExit={handleSaveAndExit}

@@ -10,12 +10,12 @@ import { CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 
-interface Step10AvailabilityProps {
+interface Step11AvailabilityProps {
   data: TalentProfileData;
   onChange: (field: keyof TalentProfileData, value: any) => void;
 }
 
-export const Step10Availability = ({ data, onChange }: Step10AvailabilityProps) => {
+export const Step11Availability = ({ data, onChange }: Step11AvailabilityProps) => {
   return (
     <Card>
       <CardContent className="pt-6">
