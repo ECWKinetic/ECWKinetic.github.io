@@ -8,9 +8,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { emailSchema as emailValidation } from '@/lib/validation';
 
 const emailSchema = z.object({
-  email: z.string().email('Please enter a valid email address')
+  email: emailValidation,
 });
 
 type EmailForm = z.infer<typeof emailSchema>;

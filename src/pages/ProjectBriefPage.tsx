@@ -3,6 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PhoneInput } from '@/components/ui/phone-input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -16,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { ProfileSection } from '@/components/profile/ProfileSection';
 import { BriefSubmissionDialog } from '@/components/brief/BriefSubmissionDialog';
 import PortalHeader from '@/components/portal/PortalHeader';
+import { emailSchema, phoneSchema } from '@/lib/validation';
 
 interface ProjectBrief {
   id: string;
@@ -170,6 +172,16 @@ export default function ProjectBriefPage() {
     const errors: string[] = [];
     
     switch(step) {
+      case 2:
+        // Validate email if provided
+        if (formData.requestor_email && !emailSchema.safeParse(formData.requestor_email).success) {
+          errors.push('Please enter a valid requestor email address');
+        }
+        // Validate phone if provided
+        if (formData.requestor_phone && !phoneSchema.safeParse(formData.requestor_phone).success) {
+          errors.push('Please enter a valid requestor phone number (e.g., (555) 123-4567)');
+        }
+        break;
       case 3:
         if (!formData.project_title?.trim()) errors.push('Project Title is required');
         if (!formData.project_description?.trim()) errors.push('Project Description is required');
@@ -429,11 +441,11 @@ export default function ProjectBriefPage() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="requestor_email">Requestor Email</Label>
-              <Input id="requestor_email" type="email" value={formData.requestor_email || ''} onChange={(e) => updateFormData('requestor_email', e.target.value)} />
+              <Input id="requestor_email" type="email" placeholder="email@company.com" value={formData.requestor_email || ''} onChange={(e) => updateFormData('requestor_email', e.target.value)} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="requestor_phone">Requestor Phone</Label>
-              <Input id="requestor_phone" type="tel" value={formData.requestor_phone || ''} onChange={(e) => updateFormData('requestor_phone', e.target.value)} />
+              <PhoneInput id="requestor_phone" placeholder="(555) 123-4567" value={formData.requestor_phone || ''} onChange={(e) => updateFormData('requestor_phone', e.target.value)} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="relationship_to_search">Relationship to Search</Label>

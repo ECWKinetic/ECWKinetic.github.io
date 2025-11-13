@@ -2,10 +2,12 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PhoneInput } from "@/components/ui/phone-input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import { ChevronDown, ChevronUp, Edit, Save, X } from "lucide-react";
+import { phoneSchema } from "@/lib/validation";
 
 export const ProfileSection = () => {
   const { profile, customerProfile, updateProfile, updateCustomerProfile } = useAuth();
@@ -19,6 +21,19 @@ export const ProfileSection = () => {
   });
 
   const handleSave = async () => {
+    // Validate phone if provided
+    if (formData.phone) {
+      const phoneValidation = phoneSchema.safeParse(formData.phone);
+      if (!phoneValidation.success) {
+        toast({
+          title: "Validation Error",
+          description: "Please enter a valid phone number",
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+
     try {
       // Update base profile
       await updateProfile({ full_name: formData.full_name });
@@ -134,9 +149,9 @@ export const ProfileSection = () => {
             
             <div className="space-y-2">
               <Label htmlFor="phone">Phone</Label>
-              <Input
+              <PhoneInput
                 id="phone"
-                type="tel"
+                placeholder="(555) 123-4567"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 disabled={!isEditing}

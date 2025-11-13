@@ -4,11 +4,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PhoneInput } from '@/components/ui/phone-input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { emailSchema, phoneRequiredSchema } from '@/lib/validation';
 import {
   Dialog,
   DialogContent,
@@ -19,9 +21,9 @@ import {
 
 const peFormSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
-  email: z.string().trim().email("Invalid email address").max(255, "Email must be less than 255 characters"),
+  email: emailSchema,
   companyName: z.string().trim().min(1, "Company name is required").max(100, "Company name must be less than 100 characters"),
-  phone: z.string().trim().max(20, "Phone must be less than 20 characters").optional().or(z.literal('')),
+  phone: phoneRequiredSchema,
 });
 
 type PEFormData = z.infer<typeof peFormSchema>;
@@ -127,10 +129,9 @@ const PEFirmForm = () => {
       </div>
       <div>
         <Label htmlFor="pe-phone" className="text-white">Phone *</Label>
-        <Input
+        <PhoneInput
           id="pe-phone"
-          type="tel"
-          placeholder="Your Phone Number"
+          placeholder="(555) 123-4567"
           {...register('phone')}
           className="mt-1"
         />
