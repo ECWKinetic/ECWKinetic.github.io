@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -7,8 +8,31 @@ const corsHeaders = {
 };
 
 const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
-const ASSISTANT_ID = 'asst_GvoIu1KSLelzuajXVLqFwuZz';
-const N8N_WEBHOOK_URL = 'https://kineticconsulting.app.n8n.cloud/webhook-test/form-submission';
+const ASSISTANT_ID = Deno.env.get('ASSISTANT_ID') || 'asst_GvoIu1KSLelzuajXVLqFwuZz';
+const N8N_WEBHOOK_URL = Deno.env.get('N8N_WEBHOOK_URL') || 'https://kineticconsulting.app.n8n.cloud/webhook-test/form-submission';
+
+const MAX_MESSAGE_LENGTH = 5000;
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+const MAX_FILES_PER_MESSAGE = 5;
+
+const requestSchema = z.object({
+  action: z.enum(['start', 'message', 'close', 'timeout', 'upload_file']),
+  threadId: z.string().max(500).optional(),
+  message: z.string().max(MAX_MESSAGE_LENGTH).optional(),
+  formData: z.object({
+    name: z.string().max(200),
+    email: z.string().email().max(255),
+    type: z.enum(['candidate', 'projectlead']),
+    sessionId: z.string().max(200),
+    companyName: z.string().max(200).optional(),
+    phone: z.string().max(50).optional(),
+  }),
+  messageCount: z.number().int().min(0).max(1000).optional(),
+  fileData: z.string().max(15 * 1024 * 1024).optional(), // Base64 encoded ~10MB file
+  fileName: z.string().max(255).optional(),
+  fileType: z.string().max(100).optional(),
+  fileIds: z.array(z.string().max(500)).max(MAX_FILES_PER_MESSAGE).optional(),
+});
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -47,7 +71,25 @@ serve(async (req) => {
       throw new Error('OPENAI_API_KEY is not configured');
     }
 
-    const body: RequestBody = await req.json();
+    const rawBody = await req.json();
+    
+    // Validate request body
+    const validationResult = requestSchema.safeParse(rawBody);
+    if (!validationResult.success) {
+      console.error('Validation error:', validationResult.error);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Invalid request data',
+          details: validationResult.error.errors 
+        }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
+    const body = validationResult.data;
     const { action, threadId, message, formData, messageCount = 0, fileData, fileName, fileType, fileIds } = body;
 
     console.log('OpenAI Assistant Chat - Action:', action, 'ThreadID:', threadId);
@@ -69,6 +111,17 @@ serve(async (req) => {
         // Decode base64 file data
         const base64Data = fileData.split(',')[1] || fileData;
         const buffer = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
+        
+        // Validate file size
+        if (buffer.length > MAX_FILE_SIZE) {
+          return new Response(
+            JSON.stringify({ error: `File size exceeds maximum allowed size of ${MAX_FILE_SIZE / 1024 / 1024}MB` }),
+            {
+              status: 400,
+              headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            }
+          );
+        }
         
         // Create a File-like object for OpenAI
         const file = new File([buffer], fileName, { type: fileType || 'application/octet-stream' });

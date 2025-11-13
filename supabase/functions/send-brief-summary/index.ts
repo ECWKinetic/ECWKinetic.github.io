@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -8,12 +9,18 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-interface BriefSummaryRequest {
-  briefData: any;
-  recipientEmail: string;
-  sendCopy: boolean;
-  convertToJobDescription: boolean;
-}
+const requestSchema = z.object({
+  briefData: z.object({
+    portfolio_company_name: z.string().max(200),
+    role_title: z.string().max(200),
+    company_location: z.string().max(200),
+    industry_sector: z.string().max(200),
+    // Add other required fields with reasonable max lengths
+  }).passthrough(), // Allow other fields
+  recipientEmail: z.string().email().max(255),
+  sendCopy: z.boolean(),
+  convertToJobDescription: z.boolean(),
+});
 
 const escapeHtml = (text: string | null | undefined): string => {
   if (!text) return '';
@@ -244,7 +251,25 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { briefData, recipientEmail, sendCopy, convertToJobDescription }: BriefSummaryRequest = await req.json();
+    const rawBody = await req.json();
+    
+    // Validate request body
+    const validationResult = requestSchema.safeParse(rawBody);
+    if (!validationResult.success) {
+      console.error('Validation error:', validationResult.error);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Invalid request data',
+          details: validationResult.error.errors 
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    const { briefData, recipientEmail, sendCopy, convertToJobDescription } = validationResult.data;
 
     console.log("Sending brief summary emails:", { recipientEmail, sendCopy, convertToJobDescription });
 

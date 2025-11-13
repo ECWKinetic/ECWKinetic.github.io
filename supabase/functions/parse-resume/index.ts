@@ -2,11 +2,18 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.74.0";
 import pdfParse from "npm:pdf-parse@1.1.1";
 import mammoth from "npm:mammoth@1.8.0";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
+const requestSchema = z.object({
+  filePath: z.string().min(1).max(500),
+});
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -15,12 +22,26 @@ serve(async (req) => {
   }
 
   try {
-    const { filePath } = await req.json();
-    console.log('Parsing resume from path:', filePath);
-
-    if (!filePath) {
-      throw new Error('File path is required');
+    const rawBody = await req.json();
+    
+    // Validate request body
+    const validationResult = requestSchema.safeParse(rawBody);
+    if (!validationResult.success) {
+      console.error('Validation error:', validationResult.error);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Invalid request data',
+          details: validationResult.error.errors 
+        }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
     }
+
+    const { filePath } = validationResult.data;
+    console.log('Parsing resume from path:', filePath);
 
     // Initialize Supabase client
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
@@ -42,6 +63,17 @@ serve(async (req) => {
     // Convert to buffer
     const arrayBuffer = await fileData.arrayBuffer();
     const buffer = new Uint8Array(arrayBuffer);
+    
+    // Validate file size
+    if (buffer.length > MAX_FILE_SIZE) {
+      return new Response(
+        JSON.stringify({ error: `File size exceeds maximum allowed size of ${MAX_FILE_SIZE / 1024 / 1024}MB` }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
 
     // Determine file type and extract text
     let resumeText = '';
