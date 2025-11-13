@@ -3,6 +3,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { MultiSelectCheckboxes } from '@/components/talent/MultiSelectCheckboxes';
 import { TalentProfileData, ENGAGEMENT_OPTIONS } from '@/types/talentProfile';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { CalendarIcon } from 'lucide-react';
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 
 interface Step10AvailabilityProps {
   data: TalentProfileData;
@@ -37,13 +43,31 @@ export const Step10Availability = ({ data, onChange }: Step10AvailabilityProps) 
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="availability">Current Availability</Label>
-                <Input
-                  id="availability"
-                  value={data.availability || ''}
-                  onChange={(e) => onChange('availability', e.target.value)}
-                  placeholder="e.g., Immediate, 2 weeks notice, 1 month"
-                />
+                <Label htmlFor="availability">Available Start Date</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !data.availability && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {data.availability ? format(new Date(data.availability), "PPP") : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={data.availability ? new Date(data.availability) : undefined}
+                      onSelect={(date) => onChange('availability', date ? date.toISOString() : null)}
+                      disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                      initialFocus
+                      className="pointer-events-auto"
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
             </div>
 
