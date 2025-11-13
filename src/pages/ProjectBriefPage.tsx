@@ -11,10 +11,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
-import { LogOut, Briefcase, Plus, Edit, Trash, ChevronLeft, ChevronRight, Upload, X as XIcon } from 'lucide-react';
+import { Plus, Trash, ChevronLeft, ChevronRight, Upload, X as XIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { ProfileSection } from '@/components/profile/ProfileSection';
 import { BriefSubmissionDialog } from '@/components/brief/BriefSubmissionDialog';
+import PortalHeader from '@/components/portal/PortalHeader';
 
 interface ProjectBrief {
   id: string;
@@ -963,22 +964,12 @@ export default function ProjectBriefPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Briefcase className="h-6 w-6" />
-            <div>
-              <h1 className="font-semibold">Project Briefs</h1>
-              <p className="text-sm text-muted-foreground">{profile?.email}</p>
-            </div>
-          </div>
-          <Button variant="outline" onClick={handleSignOut}>
-            <LogOut className="h-4 w-4 mr-2" />
-            Sign Out
-          </Button>
-        </div>
-      </header>
+    <div className="min-h-screen bg-kinetic-lightGray">
+      <PortalHeader 
+        portalType="client"
+        userEmail={profile?.email || ''}
+        onSignOut={handleSignOut}
+      />
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         {!showForm ? (
@@ -986,15 +977,15 @@ export default function ProjectBriefPage() {
             <ProfileSection />
             
             <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold">Your Project Briefs</h2>
-              <Button onClick={() => setShowForm(true)}>
+              <h2 className="text-2xl font-bold text-kinetic-navy">Your Briefs</h2>
+              <Button onClick={() => setShowForm(true)} className="bg-kinetic-copper hover:bg-kinetic-copper/90">
                 <Plus className="h-4 w-4 mr-2" />
                 New Brief
               </Button>
             </div>
 
             {briefs.length === 0 ? (
-              <Card>
+              <Card className="border-t-4 border-t-kinetic-copper">
                 <CardContent className="pt-6">
                   <p className="text-center text-muted-foreground">No briefs yet. Create your first brief to get started.</p>
                 </CardContent>
@@ -1002,7 +993,7 @@ export default function ProjectBriefPage() {
             ) : (
               <div className="grid gap-4">
                 {briefs.map((brief) => (
-                  <Card key={brief.id}>
+                  <Card key={brief.id} className="border-t-4 border-t-kinetic-copper">
                     <CardHeader>
                       <div className="flex justify-between items-start">
                         <div>
@@ -1028,7 +1019,7 @@ export default function ProjectBriefPage() {
             )}
           </div>
         ) : (
-          <Card>
+          <Card className="border-t-4 border-t-kinetic-copper">
             <CardHeader>
               <CardTitle>Create New Project Brief</CardTitle>
               <CardDescription>Step {currentStep} of {TOTAL_STEPS}</CardDescription>
@@ -1065,7 +1056,7 @@ export default function ProjectBriefPage() {
                       <ChevronRight className="h-4 w-4 ml-2" />
                     </Button>
                   ) : (
-                    <Button onClick={handleSubmit} disabled={saving || !confirmed}>
+                    <Button onClick={handleSubmit} disabled={saving || !confirmed} className="bg-kinetic-copper hover:bg-kinetic-copper/90">
                       {saving ? 'Submitting...' : 'Submit Brief'}
                     </Button>
                   )}

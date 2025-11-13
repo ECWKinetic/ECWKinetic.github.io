@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,12 +9,23 @@ import { Users, Briefcase } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 export default function SetupProfilePage() {
+  const [searchParams] = useSearchParams();
   const [createTalent, setCreateTalent] = useState(false);
   const [createCustomer, setCreateCustomer] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { createTalentProfile, createCustomerProfile } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Pre-select profile type if coming from "Add Profile" link
+  useEffect(() => {
+    const addType = searchParams.get('add');
+    if (addType === 'talent') {
+      setCreateTalent(true);
+    } else if (addType === 'customer') {
+      setCreateCustomer(true);
+    }
+  }, [searchParams]);
 
   const handleSubmit = async () => {
     if (!createTalent && !createCustomer) {
@@ -106,7 +117,7 @@ export default function SetupProfilePage() {
                   Client Profile
                 </Label>
                 <p className="text-sm text-muted-foreground">
-                  Submit project briefs, manage engagements, and access our talent pool
+                  Submit briefs, manage engagements, and access our talent pool
                 </p>
               </div>
             </div>

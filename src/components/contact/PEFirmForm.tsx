@@ -143,7 +143,7 @@ const PEFirmForm = () => {
           onCheckedChange={(checked) => setLoginChecked(checked as boolean)}
         />
         <Label htmlFor="pe-login" className="text-white text-sm cursor-pointer">
-          Check here to log into Kinetic's platform and enter in your project brief
+          Check here to log into Kinetic's platform and access your client portal
         </Label>
       </div>
       <Button type="submit" className="w-full bg-kinetic-copper hover:bg-kinetic-copper/90">
@@ -159,7 +159,7 @@ const PEFirmForm = () => {
                 We've sent a magic link to <strong>{submittedEmail}</strong>
               </p>
               <p>
-                Click the link in the email to log in and submit your project brief.
+                Click the link in the email to log in and access your client portal.
               </p>
             </DialogDescription>
           </DialogHeader>

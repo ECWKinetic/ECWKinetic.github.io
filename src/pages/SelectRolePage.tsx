@@ -52,7 +52,7 @@ export default function SelectRolePage() {
               </div>
               <CardTitle>Client Portal</CardTitle>
               <CardDescription>
-                Create and manage project briefs, review talent matches, and track engagements
+                Create and manage briefs, review talent matches, and track engagements
               </CardDescription>
             </CardHeader>
             <CardContent>

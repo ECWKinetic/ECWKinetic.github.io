@@ -7,8 +7,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { LogOut, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import PortalHeader from '@/components/portal/PortalHeader';
 
 interface TalentProfile {
   skills: string[];
@@ -114,25 +114,15 @@ export default function TalentNetworkPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <User className="h-6 w-6" />
-            <div>
-              <h1 className="font-semibold">Talent Network</h1>
-              <p className="text-sm text-muted-foreground">{profile?.email}</p>
-            </div>
-          </div>
-          <Button variant="outline" onClick={handleSignOut}>
-            <LogOut className="h-4 w-4 mr-2" />
-            Sign Out
-          </Button>
-        </div>
-      </header>
+    <div className="min-h-screen bg-kinetic-lightGray">
+      <PortalHeader 
+        portalType="talent"
+        userEmail={profile?.email || ''}
+        onSignOut={handleSignOut}
+      />
 
       <main className="container mx-auto px-4 py-8 max-w-3xl">
-        <Card>
+        <Card className="border-t-4 border-t-kinetic-copper">
           <CardHeader>
             <CardTitle>Your Profile</CardTitle>
             <CardDescription>
@@ -198,7 +188,11 @@ export default function TalentNetworkPage() {
               />
             </div>
 
-            <Button onClick={handleSave} disabled={saving} className="w-full">
+            <Button 
+              onClick={handleSave} 
+              disabled={saving} 
+              className="w-full bg-kinetic-copper hover:bg-kinetic-copper/90"
+            >
               {saving ? 'Saving...' : 'Save Profile'}
             </Button>
           </CardContent>
