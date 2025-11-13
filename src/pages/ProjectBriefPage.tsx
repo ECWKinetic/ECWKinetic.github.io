@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
 import { LogOut, Briefcase, Plus, Edit, Trash, ChevronLeft, ChevronRight, Upload, X as XIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -164,7 +165,31 @@ export default function ProjectBriefPage() {
     navigate('/');
   };
 
+  const validateStep = (step: number): { valid: boolean; errors: string[] } => {
+    const errors: string[] = [];
+    
+    switch(step) {
+      case 3:
+        if (!formData.project_title?.trim()) errors.push('Project Title is required');
+        if (!formData.project_description?.trim()) errors.push('Project Description is required');
+        if (!formData.engagement_type) errors.push('Engagement Type is required');
+        if (!formData.role_title?.trim()) errors.push('Role Title is required');
+        break;
+    }
+    
+    return { valid: errors.length === 0, errors };
+  };
+
   const nextStep = () => {
+    const validation = validateStep(currentStep);
+    if (!validation.valid) {
+      toast({
+        variant: 'destructive',
+        title: 'Required Fields Missing',
+        description: validation.errors.join(', ')
+      });
+      return;
+    }
     if (currentStep < TOTAL_STEPS) setCurrentStep(currentStep + 1);
   };
 
@@ -438,6 +463,25 @@ export default function ProjectBriefPage() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Step 3: Nature of the Need</h3>
             <div className="space-y-2">
+              <Label htmlFor="project_title">Project Title *</Label>
+              <Input 
+                id="project_title" 
+                value={formData.project_title || ''} 
+                onChange={(e) => updateFormData('project_title', e.target.value)}
+                className={!formData.project_title?.trim() ? 'border-destructive' : ''}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="project_description">Project Description *</Label>
+              <Textarea 
+                id="project_description" 
+                value={formData.project_description || ''} 
+                onChange={(e) => updateFormData('project_description', e.target.value)}
+                className={!formData.project_description?.trim() ? 'border-destructive' : ''}
+                rows={4}
+              />
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="engagement_type">Engagement Type *</Label>
               <Select value={formData.engagement_type || ''} onValueChange={(v) => updateFormData('engagement_type', v)}>
                 <SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger>
@@ -451,8 +495,13 @@ export default function ProjectBriefPage() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="role_title">Role Title</Label>
-              <Input id="role_title" value={formData.role_title || ''} onChange={(e) => updateFormData('role_title', e.target.value)} />
+              <Label htmlFor="role_title">Role Title *</Label>
+              <Input 
+                id="role_title" 
+                value={formData.role_title || ''} 
+                onChange={(e) => updateFormData('role_title', e.target.value)}
+                className={!formData.role_title?.trim() ? 'border-destructive' : ''}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="role_summary">One-line Summary of the Need</Label>
@@ -983,6 +1032,12 @@ export default function ProjectBriefPage() {
             <CardHeader>
               <CardTitle>Create New Project Brief</CardTitle>
               <CardDescription>Step {currentStep} of {TOTAL_STEPS}</CardDescription>
+              <div className="pt-2">
+                <Progress value={(currentStep / TOTAL_STEPS) * 100} className="h-2" />
+                <p className="text-xs text-muted-foreground text-right mt-1">
+                  {Math.round((currentStep / TOTAL_STEPS) * 100)}% complete
+                </p>
+              </div>
             </CardHeader>
             <CardContent className="space-y-6">
               {renderStepContent()}
