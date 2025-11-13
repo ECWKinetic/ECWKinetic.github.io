@@ -36,9 +36,27 @@ const PEFirmForm = () => {
   const { signInWithMagicLink } = useAuth();
   const [loginChecked, setLoginChecked] = useState(false);
   const [showMagicLinkDialog, setShowMagicLinkDialog] = useState(false);
+  const [showThankYouDialog, setShowThankYouDialog] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState('');
 
   const onSubmit = async (data: PEFormData) => {
+    // Send fallback email (backup in case something fails)
+    try {
+      await supabase.functions.invoke('send-fallback-email', {
+        body: {
+          type: 'projectlead',
+          data: {
+            name: data.name,
+            email: data.email,
+            companyName: data.companyName,
+            phone: data.phone || '',
+          },
+        },
+      });
+    } catch (emailError) {
+      console.error('Fallback email failed:', emailError);
+    }
+
     // If login checkbox is checked, send magic link
     if (loginChecked) {
       try {
@@ -51,43 +69,11 @@ const PEFirmForm = () => {
           title: 'Error',
           description: 'Failed to send magic link. Please try again.',
         });
+        return;
       }
-    }
-
-    // Generate SessionID
-    const sessionId = crypto.randomUUID();
-    
-    // Send fallback email (backup in case something fails)
-    try {
-      await supabase.functions.invoke('send-fallback-email', {
-        body: {
-          type: 'projectlead',
-          data: {
-            name: data.name,
-            email: data.email,
-            companyName: data.companyName,
-            phone: data.phone || '',
-            sessionId: sessionId,
-          },
-        },
-      });
-    } catch (emailError) {
-      console.error('Fallback email failed:', emailError);
-    }
-
-    // Always open chat with form data
-    if (typeof window !== 'undefined') {
-      const chatEvent = new CustomEvent('openN8nChat', {
-        detail: {
-          name: data.name,
-          email: data.email,
-          companyName: data.companyName,
-          phone: data.phone,
-          type: 'projectlead',
-          sessionId: sessionId,
-        }
-      });
-      window.dispatchEvent(chatEvent);
+    } else {
+      // Show thank you dialog instead
+      setShowThankYouDialog(true);
     }
     
     reset();
@@ -162,6 +148,17 @@ const PEFirmForm = () => {
               <p>
                 Click the link in the email to log in and access your client portal.
               </p>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showThankYouDialog} onOpenChange={setShowThankYouDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Thank You!</DialogTitle>
+            <DialogDescription>
+              Thanks for submitting your information, someone will be in touch soon.
             </DialogDescription>
           </DialogHeader>
         </DialogContent>
