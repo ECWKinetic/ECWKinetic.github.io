@@ -83,7 +83,6 @@ const NavLinks = ({ isMobile, onItemClick, onNavigate }: NavLinksProps) => {
     { name: 'How We Work', id: 'how-we-work' },
     { name: 'Clients', id: 'clients' },
     { name: 'Team', id: 'team' },
-    { name: 'Contact', id: 'contact' },
   ];
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
@@ -94,6 +93,25 @@ const NavLinks = ({ isMobile, onItemClick, onNavigate }: NavLinksProps) => {
 
   return (
     <>
+      {user && profile ? (
+        <Link to={profile.user_type === 'talent' ? '/talent-network' : '/project-brief'}>
+          <Button 
+            style={{ backgroundColor: '#C49A6C' }}
+            className={`text-white hover:bg-opacity-90 ${isMobile ? 'w-full' : ''}`}
+          >
+            Dashboard
+          </Button>
+        </Link>
+      ) : (
+        <Link to="/login">
+          <Button 
+            style={{ backgroundColor: '#C49A6C' }}
+            className={`text-white hover:bg-opacity-90 ${isMobile ? 'w-full' : ''}`}
+          >
+            Login
+          </Button>
+        </Link>
+      )}
       {links.map((link) => (
         <a
           key={link.name}
@@ -106,25 +124,6 @@ const NavLinks = ({ isMobile, onItemClick, onNavigate }: NavLinksProps) => {
           {link.name}
         </a>
       ))}
-      {user && profile ? (
-        <Link to={profile.user_type === 'talent' ? '/talent-network' : '/project-brief'}>
-          <Button 
-            variant="outline"
-            className={isMobile ? 'w-full' : ''}
-          >
-            Dashboard
-          </Button>
-        </Link>
-      ) : (
-        <Link to="/login">
-          <Button 
-            variant="outline"
-            className={isMobile ? 'w-full' : ''}
-          >
-            Login
-          </Button>
-        </Link>
-      )}
       <Button 
         style={{ backgroundColor: '#379392' }}
         className="text-white hover:bg-opacity-90"
