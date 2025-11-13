@@ -43,43 +43,241 @@ export type Database = {
       }
       project_briefs: {
         Row: {
+          background_check_details: string | null
+          background_check_required: string | null
+          board_experience: string | null
+          board_interaction: string | null
           budget_range: string | null
+          certifications: string | null
+          change_management_experience: string | null
+          company_location: string | null
           company_name: string | null
+          company_size_headcount: number | null
+          company_size_revenue: number | null
+          company_type: string | null
+          compensation_model: string | null
+          confidentiality_level: string | null
+          consulting_background: string | null
           created_at: string | null
+          decision_maker_name: string | null
+          decision_maker_title: string | null
+          direct_reports: string | null
+          education_requirements: string | null
+          engagement_trigger: string[] | null
+          engagement_type: string | null
+          equity_component: string | null
+          equity_notes: string | null
+          expected_duration: string | null
+          expense_policy: string | null
+          family_office_contact: string | null
+          family_office_name: string | null
+          functional_expertise: string[] | null
+          hard_end_date: string | null
           id: string
+          industry_experience_description: string | null
+          industry_experience_required: string | null
+          industry_sector: string | null
+          interim_experience: string | null
+          interview_steps: string | null
+          job_description_upload: string | null
+          key_stakeholders: string | null
+          onsite_days_per_week: number | null
+          onsite_expectation: string | null
+          pe_experience: string | null
+          pe_firm_name: string | null
+          permanent_conversion: string | null
+          portfolio_company_name: string | null
+          primary_location: string | null
+          primary_pe_contact_name: string | null
+          primary_pe_contact_title: string | null
           project_description: string
           project_title: string
+          public_company_experience: string | null
+          references_required: string | null
+          relationship_to_search: string | null
+          reports_to_name: string | null
+          reports_to_title: string | null
+          requestor_company: string | null
+          requestor_email: string | null
+          requestor_name: string | null
+          requestor_phone: string | null
+          requestor_title: string | null
           required_skills: string[] | null
+          role_summary: string | null
+          role_title: string | null
           status: string | null
+          success_fee: string | null
+          success_metrics: string | null
+          target_decision_date: string | null
+          target_start_date: string | null
+          team_dynamics_notes: string | null
           timeline: string | null
+          top_objectives: Json | null
+          travel_geography: string | null
+          travel_requirement_percent: number | null
+          turnaround_experience: string | null
           updated_at: string | null
+          urgency_level: string | null
           user_id: string
+          years_experience_min: number | null
         }
         Insert: {
+          background_check_details?: string | null
+          background_check_required?: string | null
+          board_experience?: string | null
+          board_interaction?: string | null
           budget_range?: string | null
+          certifications?: string | null
+          change_management_experience?: string | null
+          company_location?: string | null
           company_name?: string | null
+          company_size_headcount?: number | null
+          company_size_revenue?: number | null
+          company_type?: string | null
+          compensation_model?: string | null
+          confidentiality_level?: string | null
+          consulting_background?: string | null
           created_at?: string | null
+          decision_maker_name?: string | null
+          decision_maker_title?: string | null
+          direct_reports?: string | null
+          education_requirements?: string | null
+          engagement_trigger?: string[] | null
+          engagement_type?: string | null
+          equity_component?: string | null
+          equity_notes?: string | null
+          expected_duration?: string | null
+          expense_policy?: string | null
+          family_office_contact?: string | null
+          family_office_name?: string | null
+          functional_expertise?: string[] | null
+          hard_end_date?: string | null
           id?: string
+          industry_experience_description?: string | null
+          industry_experience_required?: string | null
+          industry_sector?: string | null
+          interim_experience?: string | null
+          interview_steps?: string | null
+          job_description_upload?: string | null
+          key_stakeholders?: string | null
+          onsite_days_per_week?: number | null
+          onsite_expectation?: string | null
+          pe_experience?: string | null
+          pe_firm_name?: string | null
+          permanent_conversion?: string | null
+          portfolio_company_name?: string | null
+          primary_location?: string | null
+          primary_pe_contact_name?: string | null
+          primary_pe_contact_title?: string | null
           project_description: string
           project_title: string
+          public_company_experience?: string | null
+          references_required?: string | null
+          relationship_to_search?: string | null
+          reports_to_name?: string | null
+          reports_to_title?: string | null
+          requestor_company?: string | null
+          requestor_email?: string | null
+          requestor_name?: string | null
+          requestor_phone?: string | null
+          requestor_title?: string | null
           required_skills?: string[] | null
+          role_summary?: string | null
+          role_title?: string | null
           status?: string | null
+          success_fee?: string | null
+          success_metrics?: string | null
+          target_decision_date?: string | null
+          target_start_date?: string | null
+          team_dynamics_notes?: string | null
           timeline?: string | null
+          top_objectives?: Json | null
+          travel_geography?: string | null
+          travel_requirement_percent?: number | null
+          turnaround_experience?: string | null
           updated_at?: string | null
+          urgency_level?: string | null
           user_id: string
+          years_experience_min?: number | null
         }
         Update: {
+          background_check_details?: string | null
+          background_check_required?: string | null
+          board_experience?: string | null
+          board_interaction?: string | null
           budget_range?: string | null
+          certifications?: string | null
+          change_management_experience?: string | null
+          company_location?: string | null
           company_name?: string | null
+          company_size_headcount?: number | null
+          company_size_revenue?: number | null
+          company_type?: string | null
+          compensation_model?: string | null
+          confidentiality_level?: string | null
+          consulting_background?: string | null
           created_at?: string | null
+          decision_maker_name?: string | null
+          decision_maker_title?: string | null
+          direct_reports?: string | null
+          education_requirements?: string | null
+          engagement_trigger?: string[] | null
+          engagement_type?: string | null
+          equity_component?: string | null
+          equity_notes?: string | null
+          expected_duration?: string | null
+          expense_policy?: string | null
+          family_office_contact?: string | null
+          family_office_name?: string | null
+          functional_expertise?: string[] | null
+          hard_end_date?: string | null
           id?: string
+          industry_experience_description?: string | null
+          industry_experience_required?: string | null
+          industry_sector?: string | null
+          interim_experience?: string | null
+          interview_steps?: string | null
+          job_description_upload?: string | null
+          key_stakeholders?: string | null
+          onsite_days_per_week?: number | null
+          onsite_expectation?: string | null
+          pe_experience?: string | null
+          pe_firm_name?: string | null
+          permanent_conversion?: string | null
+          portfolio_company_name?: string | null
+          primary_location?: string | null
+          primary_pe_contact_name?: string | null
+          primary_pe_contact_title?: string | null
           project_description?: string
           project_title?: string
+          public_company_experience?: string | null
+          references_required?: string | null
+          relationship_to_search?: string | null
+          reports_to_name?: string | null
+          reports_to_title?: string | null
+          requestor_company?: string | null
+          requestor_email?: string | null
+          requestor_name?: string | null
+          requestor_phone?: string | null
+          requestor_title?: string | null
           required_skills?: string[] | null
+          role_summary?: string | null
+          role_title?: string | null
           status?: string | null
+          success_fee?: string | null
+          success_metrics?: string | null
+          target_decision_date?: string | null
+          target_start_date?: string | null
+          team_dynamics_notes?: string | null
           timeline?: string | null
+          top_objectives?: Json | null
+          travel_geography?: string | null
+          travel_requirement_percent?: number | null
+          turnaround_experience?: string | null
           updated_at?: string | null
+          urgency_level?: string | null
           user_id?: string
+          years_experience_min?: number | null
         }
         Relationships: [
           {
