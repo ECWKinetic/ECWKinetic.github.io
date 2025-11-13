@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Mail, AlertCircle } from 'lucide-react';
 
 export default function EmailSentPage() {
-  const [countdown, setCountdown] = useState(15);
+  const [countdown, setCountdown] = useState(60);
   const [canResend, setCanResend] = useState(false);
   const [isResending, setIsResending] = useState(false);
   const location = useLocation();
@@ -14,13 +14,12 @@ export default function EmailSentPage() {
   const { signInWithMagicLink } = useAuth();
 
   const email = location.state?.email;
-  const userType = location.state?.userType;
 
   useEffect(() => {
-    if (!email || !userType) {
+    if (!email) {
       navigate('/login');
     }
-  }, [email, userType, navigate]);
+  }, [email, navigate]);
 
   useEffect(() => {
     if (countdown > 0) {
@@ -32,12 +31,12 @@ export default function EmailSentPage() {
   }, [countdown]);
 
   const handleResend = async () => {
-    if (!canResend || !email || !userType) return;
+    if (!canResend || !email) return;
 
     setIsResending(true);
     try {
-      await signInWithMagicLink(email, userType);
-      setCountdown(15);
+      await signInWithMagicLink(email);
+      setCountdown(60);
       setCanResend(false);
     } catch (error) {
       // Error already handled in context
@@ -46,7 +45,7 @@ export default function EmailSentPage() {
     }
   };
 
-  if (!email || !userType) return null;
+  if (!email) return null;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">

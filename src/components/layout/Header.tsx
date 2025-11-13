@@ -76,7 +76,7 @@ interface NavLinksProps {
 }
 
 const NavLinks = ({ isMobile, onItemClick, onNavigate }: NavLinksProps) => {
-  const { user, profile } = useAuth();
+  const { user, hasTalentProfile, hasCustomerProfile } = useAuth();
   const links = [
     { name: 'Home', id: 'home' },
     { name: 'Value Creation', id: 'value-creation' },
@@ -112,13 +112,35 @@ const NavLinks = ({ isMobile, onItemClick, onNavigate }: NavLinksProps) => {
       >
         Get in Touch
       </Button>
-      {user && profile ? (
-        <Link to={profile.user_type === 'talent' ? '/talent-network' : '/project-brief'}>
+      {user && (hasTalentProfile || hasCustomerProfile) ? (
+        <>
+          {hasTalentProfile && hasCustomerProfile ? (
+            <Link to="/select-role">
+              <Button 
+                style={{ backgroundColor: '#C49A6C' }}
+                className={`text-white hover:bg-opacity-90 ${isMobile ? 'w-full' : ''}`}
+              >
+                My Portals
+              </Button>
+            </Link>
+          ) : (
+            <Link to={hasTalentProfile ? '/talent-network' : '/project-brief'}>
+              <Button 
+                style={{ backgroundColor: '#C49A6C' }}
+                className={`text-white hover:bg-opacity-90 ${isMobile ? 'w-full' : ''}`}
+              >
+                Dashboard
+              </Button>
+            </Link>
+          )}
+        </>
+      ) : user ? (
+        <Link to="/setup-profile">
           <Button 
             style={{ backgroundColor: '#C49A6C' }}
             className={`text-white hover:bg-opacity-90 ${isMobile ? 'w-full' : ''}`}
           >
-            Dashboard
+            Setup Profile
           </Button>
         </Link>
       ) : (

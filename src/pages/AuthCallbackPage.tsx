@@ -28,37 +28,42 @@ export default function AuthCallbackPage() {
         if (sessionError) throw sessionError;
         if (!session) throw new Error('No session found');
 
-        // Get the user type from localStorage (set during login)
-        const pendingUserType = localStorage.getItem('pendingUserType') as 'talent' | 'customer' | null;
-        
-        if (!pendingUserType) {
-          throw new Error('User type not found');
-        }
-
-        // Check if profile exists, if not it will be created by trigger
-        // Wait a moment for trigger to complete
+        // Wait for profiles to be fetched
         await new Promise(resolve => setTimeout(resolve, 500));
 
-        // Verify profile was created with correct user type
-        const { data: profile, error: profileError } = await supabase
-          .from('profiles')
-          .select('user_type')
-          .eq('id', session.user.id)
+        // Check which profiles exist
+        const { data: talentData } = await supabase
+          .from('talent_profiles')
+          .select('id')
+          .eq('user_id', session.user.id)
           .single();
 
-        if (profileError) {
-          console.error('Profile error:', profileError);
-        }
+        const { data: customerData } = await supabase
+          .from('customer_profiles')
+          .select('id')
+          .eq('user_id', session.user.id)
+          .single();
 
-        // Clear pending user type
-        localStorage.removeItem('pendingUserType');
+        const hasTalent = !!talentData;
+        const hasCustomer = !!customerData;
 
         setStatus('success');
 
-        // Redirect to appropriate dashboard
+        // Determine where to redirect
         setTimeout(() => {
-          const redirectPath = pendingUserType === 'talent' ? '/talent-network' : '/project-brief';
-          navigate(redirectPath, { replace: true });
+          if (hasTalent && hasCustomer) {
+            // Has both profiles - go to role selector
+            navigate('/select-role', { replace: true });
+          } else if (hasTalent) {
+            // Only talent profile
+            navigate('/talent-network', { replace: true });
+          } else if (hasCustomer) {
+            // Only customer profile
+            navigate('/project-brief', { replace: true });
+          } else {
+            // No profiles yet - go to setup
+            navigate('/setup-profile', { replace: true });
+          }
         }, 1500);
 
       } catch (error: any) {

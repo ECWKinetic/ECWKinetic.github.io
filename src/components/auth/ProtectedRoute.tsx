@@ -4,11 +4,11 @@ import { useAuth } from '@/contexts/AuthContext';
 
 interface ProtectedRouteProps {
   children: ReactNode;
-  requiredUserType: 'talent' | 'customer';
+  requiredProfileType: 'talent' | 'customer';
 }
 
-export default function ProtectedRoute({ children, requiredUserType }: ProtectedRouteProps) {
-  const { user, profile, loading } = useAuth();
+export default function ProtectedRoute({ children, requiredProfileType }: ProtectedRouteProps) {
+  const { user, talentProfile, customerProfile, loading } = useAuth();
 
   if (loading) {
     return (
@@ -22,12 +22,13 @@ export default function ProtectedRoute({ children, requiredUserType }: Protected
     return <Navigate to="/login" replace />;
   }
 
-  if (profile?.user_type !== requiredUserType) {
-    // Wrong user type - redirect to their correct dashboard
-    const correctPath = profile?.user_type === 'talent' 
-      ? '/talent-network' 
-      : '/project-brief';
-    return <Navigate to={correctPath} replace />;
+  const hasRequiredProfile = requiredProfileType === 'talent' 
+    ? !!talentProfile 
+    : !!customerProfile;
+
+  if (!hasRequiredProfile) {
+    // User doesn't have this profile type yet
+    return <Navigate to="/setup-profile" replace />;
   }
 
   return <>{children}</>;

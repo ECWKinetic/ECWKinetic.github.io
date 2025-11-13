@@ -7,21 +7,44 @@ interface Profile {
   id: string;
   email: string;
   full_name: string | null;
-  user_type: 'talent' | 'customer' | null;
-  company_name?: string | null;
-  job_title?: string | null;
-  phone?: string | null;
   preferences?: any;
+}
+
+interface TalentProfile {
+  id: string;
+  user_id: string;
+  skills: string[] | null;
+  experience_years: number | null;
+  availability: string | null;
+  linkedin_url: string | null;
+  bio: string | null;
+}
+
+interface CustomerProfile {
+  id: string;
+  user_id: string;
+  company_name: string | null;
+  job_title: string | null;
+  phone: string | null;
+  bio: string | null;
 }
 
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   profile: Profile | null;
+  talentProfile: TalentProfile | null;
+  customerProfile: CustomerProfile | null;
   loading: boolean;
-  signInWithMagicLink: (email: string, userType: 'talent' | 'customer') => Promise<void>;
+  hasTalentProfile: boolean;
+  hasCustomerProfile: boolean;
+  signInWithMagicLink: (email: string) => Promise<void>;
   signOut: () => Promise<void>;
-  updateProfile?: (updates: Partial<Profile>) => Promise<void>;
+  updateProfile: (updates: Partial<Profile>) => Promise<void>;
+  updateTalentProfile: (updates: Partial<TalentProfile>) => Promise<void>;
+  updateCustomerProfile: (updates: Partial<CustomerProfile>) => Promise<void>;
+  createTalentProfile: () => Promise<void>;
+  createCustomerProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -30,8 +53,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [talentProfile, setTalentProfile] = useState<TalentProfile | null>(null);
+  const [customerProfile, setCustomerProfile] = useState<CustomerProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+
+  const hasTalentProfile = !!talentProfile;
+  const hasCustomerProfile = !!customerProfile;
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -43,10 +71,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (session?.user) {
           // Defer profile fetching with setTimeout to avoid deadlock
           setTimeout(() => {
-            fetchProfile(session.user.id);
+            fetchProfiles(session.user.id);
           }, 0);
         } else {
           setProfile(null);
+          setTalentProfile(null);
+          setCustomerProfile(null);
         }
       }
     );
@@ -56,7 +86,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
-        fetchProfile(session.user.id);
+        fetchProfiles(session.user.id);
       }
       setLoading(false);
     });
@@ -64,35 +94,48 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const fetchProfile = async (userId: string) => {
+  const fetchProfiles = async (userId: string) => {
     try {
-      const { data, error } = await supabase
+      // Fetch base profile
+      const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', userId)
         .single();
 
-      if (error) throw error;
-      setProfile(data as Profile);
+      if (profileError) throw profileError;
+      setProfile(profileData as Profile);
+
+      // Fetch talent profile (if exists)
+      const { data: talentData } = await supabase
+        .from('talent_profiles')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
+      
+      setTalentProfile(talentData as TalentProfile | null);
+
+      // Fetch customer profile (if exists)
+      const { data: customerData } = await supabase
+        .from('customer_profiles')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
+      
+      setCustomerProfile(customerData as CustomerProfile | null);
     } catch (error) {
-      console.error('Error fetching profile:', error);
+      console.error('Error fetching profiles:', error);
     }
   };
 
-  const signInWithMagicLink = async (email: string, userType: 'talent' | 'customer') => {
+  const signInWithMagicLink = async (email: string) => {
     try {
-      // Store user type temporarily for callback page
-      localStorage.setItem('pendingUserType', userType);
-      
       const redirectUrl = `${window.location.origin}/auth/callback`;
       
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: redirectUrl,
-          data: {
-            user_type: userType
-          }
+          emailRedirectTo: redirectUrl
         }
       });
 
@@ -115,7 +158,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
       setSession(null);
       setProfile(null);
-      localStorage.removeItem('pendingUserType');
+      setTalentProfile(null);
+      setCustomerProfile(null);
+      localStorage.removeItem('currentRole');
     } catch (error: any) {
       toast({
         variant: 'destructive',
@@ -147,8 +192,74 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const updateTalentProfile = async (updates: Partial<TalentProfile>) => {
+    if (!user) throw new Error("No user logged in");
+
+    const { error } = await supabase
+      .from("talent_profiles")
+      .update(updates)
+      .eq("user_id", user.id);
+
+    if (error) throw error;
+
+    await fetchProfiles(user.id);
+  };
+
+  const updateCustomerProfile = async (updates: Partial<CustomerProfile>) => {
+    if (!user) throw new Error("No user logged in");
+
+    const { error } = await supabase
+      .from("customer_profiles")
+      .update(updates)
+      .eq("user_id", user.id);
+
+    if (error) throw error;
+
+    await fetchProfiles(user.id);
+  };
+
+  const createTalentProfile = async () => {
+    if (!user) throw new Error("No user logged in");
+
+    const { error } = await supabase
+      .from("talent_profiles")
+      .insert({ user_id: user.id });
+
+    if (error) throw error;
+
+    await fetchProfiles(user.id);
+  };
+
+  const createCustomerProfile = async () => {
+    if (!user) throw new Error("No user logged in");
+
+    const { error } = await supabase
+      .from("customer_profiles")
+      .insert({ user_id: user.id });
+
+    if (error) throw error;
+
+    await fetchProfiles(user.id);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, session, profile, loading, signInWithMagicLink, signOut, updateProfile }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      session, 
+      profile, 
+      talentProfile,
+      customerProfile,
+      loading, 
+      hasTalentProfile,
+      hasCustomerProfile,
+      signInWithMagicLink, 
+      signOut, 
+      updateProfile,
+      updateTalentProfile,
+      updateCustomerProfile,
+      createTalentProfile,
+      createCustomerProfile
+    }}>
       {children}
     </AuthContext.Provider>
   );

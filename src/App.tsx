@@ -17,6 +17,8 @@ import EmailSentPage from "./pages/EmailSentPage";
 import AuthCallbackPage from "./pages/AuthCallbackPage";
 import TalentNetworkPage from "./pages/TalentNetworkPage";
 import ProjectBriefPage from "./pages/ProjectBriefPage";
+import SetupProfilePage from "./pages/SetupProfilePage";
+import SelectRolePage from "./pages/SelectRolePage";
 
 const queryClient = new QueryClient();
 
@@ -35,10 +37,12 @@ const App = () => {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/login/email-sent" element={<EmailSentPage />} />
               <Route path="/auth/callback" element={<AuthCallbackPage />} />
+              <Route path="/setup-profile" element={<SetupProfilePage />} />
+              <Route path="/select-role" element={<SelectRolePage />} />
               <Route 
                 path="/talent-network" 
                 element={
-                  <ProtectedRoute requiredUserType="talent">
+                  <ProtectedRoute requiredProfileType="talent">
                     <TalentNetworkPage />
                   </ProtectedRoute>
                 } 
@@ -46,7 +50,7 @@ const App = () => {
               <Route 
                 path="/project-brief" 
                 element={
-                  <ProtectedRoute requiredUserType="customer">
+                  <ProtectedRoute requiredProfileType="customer">
                     <ProjectBriefPage />
                   </ProtectedRoute>
                 } 

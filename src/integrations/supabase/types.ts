@@ -14,42 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
+      customer_profiles: {
+        Row: {
+          bio: string | null
+          company_name: string | null
+          created_at: string | null
+          id: string
+          job_title: string | null
+          phone: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          bio?: string | null
+          company_name?: string | null
+          created_at?: string | null
+          id?: string
+          job_title?: string | null
+          phone?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          bio?: string | null
+          company_name?: string | null
+          created_at?: string | null
+          id?: string
+          job_title?: string | null
+          phone?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
-          company_name: string | null
           created_at: string | null
           email: string
           full_name: string | null
           id: string
-          job_title: string | null
-          phone: string | null
           preferences: Json | null
           updated_at: string | null
-          user_type: string | null
         }
         Insert: {
-          company_name?: string | null
           created_at?: string | null
           email: string
           full_name?: string | null
           id: string
-          job_title?: string | null
-          phone?: string | null
           preferences?: Json | null
           updated_at?: string | null
-          user_type?: string | null
         }
         Update: {
-          company_name?: string | null
           created_at?: string | null
           email?: string
           full_name?: string | null
           id?: string
-          job_title?: string | null
-          phone?: string | null
           preferences?: Json | null
           updated_at?: string | null
-          user_type?: string | null
         }
         Relationships: []
       }

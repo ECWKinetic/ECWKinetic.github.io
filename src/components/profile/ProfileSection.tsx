@@ -8,28 +8,28 @@ import { toast } from "@/hooks/use-toast";
 import { ChevronDown, ChevronUp, Edit, Save, X } from "lucide-react";
 
 export const ProfileSection = () => {
-  const { profile, updateProfile } = useAuth();
+  const { profile, customerProfile, updateProfile, updateCustomerProfile } = useAuth();
   const [isExpanded, setIsExpanded] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     full_name: profile?.full_name || "",
-    company_name: profile?.company_name || "",
-    job_title: profile?.job_title || "",
-    phone: profile?.phone || "",
+    company_name: customerProfile?.company_name || "",
+    job_title: customerProfile?.job_title || "",
+    phone: customerProfile?.phone || "",
   });
 
   const handleSave = async () => {
     try {
-      if (!updateProfile) {
-        toast({
-          title: "Error",
-          description: "Profile update not available",
-          variant: "destructive",
-        });
-        return;
-      }
+      // Update base profile
+      await updateProfile({ full_name: formData.full_name });
+      
+      // Update customer profile
+      await updateCustomerProfile({
+        company_name: formData.company_name,
+        job_title: formData.job_title,
+        phone: formData.phone,
+      });
 
-      await updateProfile(formData);
       setIsEditing(false);
       toast({
         title: "Success",
@@ -48,9 +48,9 @@ export const ProfileSection = () => {
   const handleCancel = () => {
     setFormData({
       full_name: profile?.full_name || "",
-      company_name: profile?.company_name || "",
-      job_title: profile?.job_title || "",
-      phone: profile?.phone || "",
+      company_name: customerProfile?.company_name || "",
+      job_title: customerProfile?.job_title || "",
+      phone: customerProfile?.phone || "",
     });
     setIsEditing(false);
   };
