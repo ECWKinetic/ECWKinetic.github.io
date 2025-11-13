@@ -76,7 +76,7 @@ export default function LoginPage() {
               <Button type="button" variant="outline" className="w-full h-auto py-4 flex flex-col items-start gap-2" onClick={() => onUserTypeSelect('customer')} disabled={isLoading || !!errors.email}>
                 <div className="flex items-center gap-2">
                   <Briefcase className="h-5 w-5" />
-                  <span className="font-semibold">I'm a Client</span>
+                  <span className="font-semibold">I'm a Client  </span>
                 </div>
                 <span className="text-sm text-muted-foreground">Review and submit project briefs</span>
               </Button>
