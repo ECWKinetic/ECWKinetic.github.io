@@ -2,6 +2,9 @@ import { EmploymentEntry } from '@/components/talent/EmploymentHistoryRepeater';
 import { EducationEntry } from '@/components/talent/EducationRepeater';
 
 export interface TalentProfileData {
+  // Database ID (for existing profiles)
+  id?: string;
+  
   // Step 2: Personal Information
   full_name: string;
   email: string;

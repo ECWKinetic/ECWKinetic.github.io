@@ -45,6 +45,7 @@ export default function TalentNetworkPage() {
   const [aiFilledData, setAiFilledData] = useState<any>(null);
   
   const [formData, setFormData] = useState<TalentProfileData>({
+    id: undefined,
     full_name: profile?.full_name || '',
     email: profile?.email || '',
     phone: '',
@@ -80,6 +81,7 @@ export default function TalentNetworkPage() {
 
       if (data) {
         setFormData({
+          id: data.id,
           full_name: data.full_name || profile?.full_name || '',
           email: data.email || profile?.email || '',
           phone: data.phone || '',
@@ -138,6 +140,7 @@ export default function TalentNetworkPage() {
     setSaving(true);
     try {
       const profileData: any = {
+        ...(formData.id && { id: formData.id }),
         user_id: user.id,
         full_name: formData.full_name,
         email: formData.email,
