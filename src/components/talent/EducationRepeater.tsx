@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
+import { normalizeRepeaterData } from '@/lib/repeaterUtils';
+import { useMemo } from 'react';
 
 export interface EducationEntry {
   id: string;
@@ -22,6 +24,9 @@ export const EducationRepeater = ({
   onChange,
   aiFilledIds = []
 }: EducationRepeaterProps) => {
+  // Ensure all entries have unique IDs
+  const normalizedEntries = useMemo(() => normalizeRepeaterData(entries), [entries]);
+  
   const handleAdd = () => {
     const newEntry: EducationEntry = {
       id: crypto.randomUUID(),
@@ -33,11 +38,11 @@ export const EducationRepeater = ({
   };
 
   const handleRemove = (id: string) => {
-    onChange(entries.filter(entry => entry.id !== id));
+    onChange(normalizedEntries.filter(entry => entry.id !== id));
   };
 
   const handleUpdate = (id: string, field: keyof EducationEntry, value: string) => {
-    onChange(entries.map(entry => 
+    onChange(normalizedEntries.map(entry => 
       entry.id === id ? { ...entry, [field]: value } : entry
     ));
   };
@@ -52,13 +57,13 @@ export const EducationRepeater = ({
         </Button>
       </div>
 
-      {entries.length === 0 && (
+      {normalizedEntries.length === 0 && (
         <p className="text-sm text-muted-foreground text-center py-8">
           No education added yet. Click "Add Education" to start.
         </p>
       )}
 
-      {entries.map((entry, index) => (
+      {normalizedEntries.map((entry, index) => (
         <Card key={entry.id} className="p-4 bg-muted/20 relative">
           {aiFilledIds.includes(entry.id) && (
             <div className="absolute top-2 right-2 text-xs bg-primary text-primary-foreground px-2 py-1 rounded">

@@ -18,6 +18,7 @@ import { Step9Functional } from '@/components/talent/wizard/Step9Functional';
 import { Step10Availability } from '@/components/talent/wizard/Step10Availability';
 import { Step11Review } from '@/components/talent/wizard/Step11Review';
 import { TalentProfileData } from '@/types/talentProfile';
+import { normalizeRepeaterData } from '@/lib/repeaterUtils';
 
 const STEP_TITLES = [
   'Resume',
@@ -84,8 +85,8 @@ export default function TalentNetworkPage() {
           location: data.location || '',
           linkedin_url: data.linkedin_url,
           bio: data.bio,
-          employment_history: Array.isArray(data.employment_history) ? data.employment_history as any : [],
-          education: Array.isArray(data.education) ? data.education as any : [],
+          employment_history: normalizeRepeaterData(Array.isArray(data.employment_history) ? data.employment_history as any : []),
+          education: normalizeRepeaterData(Array.isArray(data.education) ? data.education as any : []),
           skills: Array.isArray(data.skills) ? data.skills : [],
           certifications: Array.isArray(data.certifications) ? data.certifications : [],
           industry_experience: Array.isArray(data.industry_experience) ? data.industry_experience : [],
@@ -112,8 +113,8 @@ export default function TalentNetworkPage() {
       location: parsedData.personal_info?.location || prev.location,
       linkedin_url: parsedData.personal_info?.linkedin || prev.linkedin_url,
       bio: parsedData.summary_bio || prev.bio,
-      employment_history: parsedData.employment_history || prev.employment_history,
-      education: parsedData.education || prev.education,
+      employment_history: normalizeRepeaterData(parsedData.employment_history) || normalizeRepeaterData(prev.employment_history),
+      education: normalizeRepeaterData(parsedData.education) || normalizeRepeaterData(prev.education),
       skills: parsedData.skills || prev.skills,
       certifications: parsedData.certifications || prev.certifications,
       industry_experience: parsedData.industry_experience || prev.industry_experience,

@@ -5,6 +5,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
+import { normalizeRepeaterData } from '@/lib/repeaterUtils';
+import { useMemo } from 'react';
 
 export interface EmploymentEntry {
   id: string;
@@ -28,6 +30,9 @@ export const EmploymentHistoryRepeater = ({
   onChange,
   aiFilledIds = []
 }: EmploymentHistoryRepeaterProps) => {
+  // Ensure all entries have unique IDs
+  const normalizedEntries = useMemo(() => normalizeRepeaterData(entries), [entries]);
+  
   const handleAdd = () => {
     const newEntry: EmploymentEntry = {
       id: crypto.randomUUID(),
@@ -43,11 +48,11 @@ export const EmploymentHistoryRepeater = ({
   };
 
   const handleRemove = (id: string) => {
-    onChange(entries.filter(entry => entry.id !== id));
+    onChange(normalizedEntries.filter(entry => entry.id !== id));
   };
 
   const handleUpdate = (id: string, field: keyof EmploymentEntry, value: any) => {
-    onChange(entries.map(entry => 
+    onChange(normalizedEntries.map(entry => 
       entry.id === id ? { ...entry, [field]: value } : entry
     ));
   };
@@ -62,13 +67,13 @@ export const EmploymentHistoryRepeater = ({
         </Button>
       </div>
 
-      {entries.length === 0 && (
+      {normalizedEntries.length === 0 && (
         <p className="text-sm text-muted-foreground text-center py-8">
           No employment history added yet. Click "Add Position" to start.
         </p>
       )}
 
-      {entries.map((entry, index) => (
+      {normalizedEntries.map((entry, index) => (
         <Card key={entry.id} className="p-4 bg-muted/20 relative">
           {aiFilledIds.includes(entry.id) && (
             <div className="absolute top-2 right-2 text-xs bg-primary text-primary-foreground px-2 py-1 rounded">
