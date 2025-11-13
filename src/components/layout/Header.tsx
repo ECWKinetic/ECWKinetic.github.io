@@ -93,25 +93,6 @@ const NavLinks = ({ isMobile, onItemClick, onNavigate }: NavLinksProps) => {
 
   return (
     <>
-      {user && profile ? (
-        <Link to={profile.user_type === 'talent' ? '/talent-network' : '/project-brief'}>
-          <Button 
-            style={{ backgroundColor: '#C49A6C' }}
-            className={`text-white hover:bg-opacity-90 ${isMobile ? 'w-full' : ''}`}
-          >
-            Dashboard
-          </Button>
-        </Link>
-      ) : (
-        <Link to="/login">
-          <Button 
-            style={{ backgroundColor: '#C49A6C' }}
-            className={`text-white hover:bg-opacity-90 ${isMobile ? 'w-full' : ''}`}
-          >
-            Login
-          </Button>
-        </Link>
-      )}
       {links.map((link) => (
         <a
           key={link.name}
@@ -131,6 +112,25 @@ const NavLinks = ({ isMobile, onItemClick, onNavigate }: NavLinksProps) => {
       >
         Get in Touch
       </Button>
+      {user && profile ? (
+        <Link to={profile.user_type === 'talent' ? '/talent-network' : '/project-brief'}>
+          <Button 
+            style={{ backgroundColor: '#C49A6C' }}
+            className={`text-white hover:bg-opacity-90 ${isMobile ? 'w-full' : ''}`}
+          >
+            Dashboard
+          </Button>
+        </Link>
+      ) : (
+        <Link to="/login">
+          <Button 
+            style={{ backgroundColor: '#C49A6C' }}
+            className={`text-white hover:bg-opacity-90 ${isMobile ? 'w-full' : ''}`}
+          >
+            Login
+          </Button>
+        </Link>
+      )}
     </>
   );
 };
