@@ -7,11 +7,11 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
 interface ResumeUploadSectionProps {
-  onParsed: (data: any) => void;
+  onResumeDataParsed?: (data: any, filePath: string) => void;
   currentResumeUrl?: string;
 }
 
-export const ResumeUploadSection = ({ onParsed, currentResumeUrl }: ResumeUploadSectionProps) => {
+export const ResumeUploadSection = ({ onResumeDataParsed, currentResumeUrl }: ResumeUploadSectionProps) => {
   const { toast } = useToast();
   const { user } = useAuth();
   const [file, setFile] = useState<File | null>(null);
@@ -102,10 +102,9 @@ export const ResumeUploadSection = ({ onParsed, currentResumeUrl }: ResumeUpload
       });
 
       // Pass parsed data to parent
-      onParsed({
-        ...parseData,
-        resume_url: filePath
-      });
+      if (onResumeDataParsed) {
+        onResumeDataParsed(parseData, filePath);
+      }
 
     } catch (error) {
       console.error('Error uploading/parsing resume:', error);
