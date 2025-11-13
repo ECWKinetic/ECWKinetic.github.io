@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 const peFormSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
@@ -22,8 +31,27 @@ const PEFirmForm = () => {
     resolver: zodResolver(peFormSchema),
   });
   const { toast } = useToast();
+  const { signInWithMagicLink } = useAuth();
+  const [loginChecked, setLoginChecked] = useState(false);
+  const [showMagicLinkDialog, setShowMagicLinkDialog] = useState(false);
+  const [submittedEmail, setSubmittedEmail] = useState('');
 
   const onSubmit = async (data: PEFormData) => {
+    // If login checkbox is checked, send magic link
+    if (loginChecked) {
+      try {
+        await signInWithMagicLink(data.email);
+        setSubmittedEmail(data.email);
+        setShowMagicLinkDialog(true);
+      } catch (error) {
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Failed to send magic link. Please try again.',
+        });
+      }
+    }
+
     // Generate SessionID
     const sessionId = crypto.randomUUID();
     
@@ -61,6 +89,7 @@ const PEFirmForm = () => {
     }
     
     reset();
+    setLoginChecked(false);
   };
 
   return (
@@ -107,9 +136,35 @@ const PEFirmForm = () => {
         />
         {errors.phone && <p className="text-kinetic-copper text-sm mt-1">{errors.phone.message}</p>}
       </div>
+      <div className="flex items-center space-x-2">
+        <Checkbox
+          id="pe-login"
+          checked={loginChecked}
+          onCheckedChange={(checked) => setLoginChecked(checked as boolean)}
+        />
+        <Label htmlFor="pe-login" className="text-white text-sm cursor-pointer">
+          Check here to log into Kinetic's platform and enter in your project brief
+        </Label>
+      </div>
       <Button type="submit" className="w-full bg-kinetic-copper hover:bg-kinetic-copper/90">
         Submit
       </Button>
+
+      <Dialog open={showMagicLinkDialog} onOpenChange={setShowMagicLinkDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Check Your Email</DialogTitle>
+            <DialogDescription className="space-y-2">
+              <p>
+                We've sent a magic link to <strong>{submittedEmail}</strong>
+              </p>
+              <p>
+                Click the link in the email to log in and submit your project brief.
+              </p>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </form>
   );
 };
