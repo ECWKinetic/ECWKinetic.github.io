@@ -8,6 +8,10 @@ interface Profile {
   email: string;
   full_name: string | null;
   user_type: 'talent' | 'customer' | null;
+  company_name?: string | null;
+  job_title?: string | null;
+  phone?: string | null;
+  preferences?: any;
 }
 
 interface AuthContextType {
@@ -17,6 +21,7 @@ interface AuthContextType {
   loading: boolean;
   signInWithMagicLink: (email: string, userType: 'talent' | 'customer') => Promise<void>;
   signOut: () => Promise<void>;
+  updateProfile?: (updates: Partial<Profile>) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -120,8 +125,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const updateProfile = async (updates: Partial<Profile>) => {
+    if (!user) throw new Error("No user logged in");
+
+    const { error } = await supabase
+      .from("profiles")
+      .update(updates)
+      .eq("id", user.id);
+
+    if (error) throw error;
+
+    // Refetch profile after update
+    const { data } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", user.id)
+      .single();
+
+    if (data) {
+      setProfile(data as Profile);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, session, profile, loading, signInWithMagicLink, signOut }}>
+    <AuthContext.Provider value={{ user, session, profile, loading, signInWithMagicLink, signOut, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );

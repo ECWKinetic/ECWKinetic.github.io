@@ -10,8 +10,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { LogOut, Briefcase, Plus, Edit, Trash, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LogOut, Briefcase, Plus, Edit, Trash, ChevronLeft, ChevronRight, Upload, X as XIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { ProfileSection } from '@/components/profile/ProfileSection';
+import { BriefSubmissionDialog } from '@/components/brief/BriefSubmissionDialog';
 
 interface ProjectBrief {
   id: string;
@@ -31,6 +33,8 @@ export default function ProjectBriefPage() {
   const [formData, setFormData] = useState<any>({});
   const [saving, setSaving] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
+  const [uploadingFile, setUploadingFile] = useState(false);
+  const [showSubmissionDialog, setShowSubmissionDialog] = useState(false);
 
   useEffect(() => {
     fetchBriefs();
@@ -79,25 +83,55 @@ export default function ProjectBriefPage() {
 
       if (error) throw error;
 
-      toast({
-        title: 'Success',
-        description: 'Project brief submitted successfully'
-      });
-
-      setShowForm(false);
-      setCurrentStep(1);
-      setFormData({});
-      setConfirmed(false);
-      fetchBriefs();
+      // Show submission dialog instead of closing form immediately
+      setShowSubmissionDialog(true);
     } catch (error: any) {
       toast({
         variant: 'destructive',
         title: 'Error',
         description: error.message || 'Failed to submit brief'
       });
-    } finally {
       setSaving(false);
     }
+  };
+
+  const handleSubmissionConfirm = async (sendCopy: boolean, convertToJobDescription: boolean) => {
+    setSaving(false);
+    
+    // Send emails if requested
+    if (sendCopy || convertToJobDescription) {
+      try {
+        const { error } = await supabase.functions.invoke('send-brief-summary', {
+          body: {
+            briefData: formData,
+            recipientEmail: user?.email,
+            sendCopy,
+            convertToJobDescription,
+          }
+        });
+
+        if (error) throw error;
+
+        toast({
+          title: 'Email Sent',
+          description: 'Check your inbox for the requested information',
+        });
+      } catch (error: any) {
+        console.error('Error sending email:', error);
+        toast({
+          variant: 'destructive',
+          title: 'Email Error',
+          description: 'Brief was saved but email failed to send',
+        });
+      }
+    }
+
+    // Reset form and refresh
+    setShowForm(false);
+    setCurrentStep(1);
+    setFormData({});
+    setConfirmed(false);
+    fetchBriefs();
   };
 
   const handleDelete = async (id: string) => {
@@ -148,6 +182,73 @@ export default function ProjectBriefPage() {
       ? current.filter((item: string) => item !== option)
       : [...current, option];
     updateFormData(field, updated);
+  };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !user) return;
+
+    setUploadingFile(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+      
+      const { error: uploadError } = await supabase.storage
+        .from('job-descriptions')
+        .upload(fileName, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('job-descriptions')
+        .getPublicUrl(fileName);
+
+      updateFormData('job_description_upload', publicUrl);
+      
+      toast({
+        title: 'Success',
+        description: 'File uploaded successfully',
+      });
+    } catch (error: any) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: error.message || 'Failed to upload file',
+      });
+    } finally {
+      setUploadingFile(false);
+    }
+  };
+
+  const handleRemoveFile = async () => {
+    if (!formData.job_description_upload) return;
+
+    try {
+      // Extract file path from URL
+      const url = new URL(formData.job_description_upload);
+      const pathParts = url.pathname.split('/');
+      const filePath = pathParts.slice(pathParts.indexOf('job-descriptions') + 1).join('/');
+
+      const { error } = await supabase.storage
+        .from('job-descriptions')
+        .remove([filePath]);
+
+      if (error) throw error;
+
+      updateFormData('job_description_upload', null);
+      
+      toast({
+        title: 'Success',
+        description: 'File removed',
+      });
+    } catch (error: any) {
+      console.error('Error removing file:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to remove file',
+      });
+    }
   };
 
   if (loading) {
@@ -385,6 +486,34 @@ export default function ProjectBriefPage() {
                   }}
                 />
               ))}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="job_description_upload">Job Description (Optional)</Label>
+              {formData.job_description_upload ? (
+                <div className="flex items-center gap-2 p-3 border rounded-md">
+                  <span className="flex-1 text-sm truncate">{formData.job_description_upload.split('/').pop()}</span>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleRemoveFile}
+                  >
+                    <XIcon className="h-4 w-4" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Input
+                    id="job_description_upload"
+                    type="file"
+                    accept=".pdf,.doc,.docx,.ppt,.pptx"
+                    onChange={handleFileUpload}
+                    disabled={uploadingFile}
+                    className="cursor-pointer"
+                  />
+                  {uploadingFile && <span className="text-sm text-muted-foreground">Uploading...</span>}
+                </div>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="success_metrics">How success will be measured</Label>
@@ -804,7 +933,9 @@ export default function ProjectBriefPage() {
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         {!showForm ? (
-          <div className="space-y-4">
+          <div className="space-y-6">
+            <ProfileSection />
+            
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold">Your Project Briefs</h2>
               <Button onClick={() => setShowForm(true)}>
@@ -815,34 +946,33 @@ export default function ProjectBriefPage() {
 
             {briefs.length === 0 ? (
               <Card>
-                <CardContent className="py-8 text-center text-muted-foreground">
-                  No briefs yet. Create your first one to get started!
+                <CardContent className="pt-6">
+                  <p className="text-center text-muted-foreground">No briefs yet. Create your first brief to get started.</p>
                 </CardContent>
               </Card>
             ) : (
-              <div className="space-y-4">
+              <div className="grid gap-4">
                 {briefs.map((brief) => (
                   <Card key={brief.id}>
                     <CardHeader>
                       <div className="flex justify-between items-start">
-                        <div className="space-y-1">
-                          <CardTitle>{brief.role_title || brief.portfolio_company_name || 'Untitled Brief'}</CardTitle>
-                          {brief.portfolio_company_name && (
-                            <CardDescription>{brief.portfolio_company_name}</CardDescription>
-                          )}
+                        <div>
+                          <CardTitle>{brief.role_title || 'Untitled Brief'}</CardTitle>
+                          <CardDescription>
+                            {brief.portfolio_company_name && `${brief.portfolio_company_name} • `}
+                            Created {new Date(brief.created_at).toLocaleDateString()}
+                          </CardDescription>
                         </div>
-                        <Badge>{brief.status || 'draft'}</Badge>
+                        <div className="flex gap-2">
+                          <Badge variant={brief.status === 'submitted' ? 'default' : 'secondary'}>
+                            {brief.status}
+                          </Badge>
+                          <Button variant="ghost" size="sm" onClick={() => handleDelete(brief.id)}>
+                            <Trash className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     </CardHeader>
-                    <CardContent className="space-y-4">
-                      <p className="text-muted-foreground">{brief.role_summary || brief.project_description}</p>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm" onClick={() => handleDelete(brief.id)}>
-                          <Trash className="h-4 w-4 mr-2" />
-                          Delete
-                        </Button>
-                      </div>
-                    </CardContent>
                   </Card>
                 ))}
               </div>
@@ -852,20 +982,12 @@ export default function ProjectBriefPage() {
           <Card>
             <CardHeader>
               <CardTitle>Create New Project Brief</CardTitle>
-              <CardDescription>
-                Step {currentStep} of {TOTAL_STEPS}
-              </CardDescription>
-              <div className="w-full bg-muted rounded-full h-2 mt-2">
-                <div
-                  className="bg-primary h-2 rounded-full transition-all"
-                  style={{ width: `${(currentStep / TOTAL_STEPS) * 100}%` }}
-                />
-              </div>
+              <CardDescription>Step {currentStep} of {TOTAL_STEPS}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {renderStepContent()}
 
-              <div className="flex justify-between pt-4">
+              <div className="flex gap-2 justify-between pt-4">
                 <Button
                   variant="outline"
                   onClick={prevStep}
@@ -874,35 +996,36 @@ export default function ProjectBriefPage() {
                   <ChevronLeft className="h-4 w-4 mr-2" />
                   Previous
                 </Button>
-                
-                {currentStep < TOTAL_STEPS ? (
-                  <Button onClick={nextStep}>
-                    Next
-                    <ChevronRight className="h-4 w-4 ml-2" />
+                <div className="flex gap-2">
+                  <Button variant="outline" onClick={() => {
+                    setShowForm(false);
+                    setCurrentStep(1);
+                    setFormData({});
+                  }}>
+                    Cancel
                   </Button>
-                ) : (
-                  <Button onClick={handleSubmit} disabled={saving || !confirmed}>
-                    {saving ? 'Submitting...' : 'Submit Brief'}
-                  </Button>
-                )}
+                  {currentStep < TOTAL_STEPS ? (
+                    <Button onClick={nextStep}>
+                      Next
+                      <ChevronRight className="h-4 w-4 ml-2" />
+                    </Button>
+                  ) : (
+                    <Button onClick={handleSubmit} disabled={saving || !confirmed}>
+                      {saving ? 'Submitting...' : 'Submit Brief'}
+                    </Button>
+                  )}
+                </div>
               </div>
-
-              <Button
-                variant="ghost"
-                onClick={() => {
-                  setShowForm(false);
-                  setCurrentStep(1);
-                  setFormData({});
-                  setConfirmed(false);
-                }}
-                className="w-full"
-              >
-                Cancel
-              </Button>
             </CardContent>
           </Card>
         )}
       </main>
+
+      <BriefSubmissionDialog
+        open={showSubmissionDialog}
+        onOpenChange={setShowSubmissionDialog}
+        onConfirm={handleSubmissionConfirm}
+      />
     </div>
   );
 }
