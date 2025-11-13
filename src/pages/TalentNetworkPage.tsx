@@ -17,8 +17,9 @@ import { Step8Industry } from '@/components/talent/wizard/Step8Industry';
 import { Step9Functional } from '@/components/talent/wizard/Step9Functional';
 import { Step10Availability } from '@/components/talent/wizard/Step10Availability';
 import { Step11Review } from '@/components/talent/wizard/Step11Review';
-import { TalentProfileData } from '@/types/talentProfile';
+import { TalentProfileData, SKILLS_OPTIONS, INDUSTRY_OPTIONS, FUNCTIONAL_EXPERTISE_OPTIONS } from '@/types/talentProfile';
 import { normalizeRepeaterData } from '@/lib/repeaterUtils';
+import { normalizeSelectOptions } from '@/lib/utils';
 
 const STEP_TITLES = [
   'Resume',
@@ -87,10 +88,10 @@ export default function TalentNetworkPage() {
           bio: data.bio,
           employment_history: normalizeRepeaterData(Array.isArray(data.employment_history) ? data.employment_history as any : []),
           education: normalizeRepeaterData(Array.isArray(data.education) ? data.education as any : []),
-          skills: Array.isArray(data.skills) ? data.skills : [],
+          skills: normalizeSelectOptions(data.skills, SKILLS_OPTIONS),
           certifications: Array.isArray(data.certifications) ? data.certifications : [],
-          industry_experience: Array.isArray(data.industry_experience) ? data.industry_experience : [],
-          functional_expertise: Array.isArray(data.functional_expertise) ? data.functional_expertise : [],
+          industry_experience: normalizeSelectOptions(data.industry_experience, INDUSTRY_OPTIONS),
+          functional_expertise: normalizeSelectOptions(data.functional_expertise, FUNCTIONAL_EXPERTISE_OPTIONS),
           availability: data.availability,
           experience_years: data.experience_years,
           preferred_engagement: Array.isArray(data.preferred_engagement) ? data.preferred_engagement : [],
@@ -115,10 +116,10 @@ export default function TalentNetworkPage() {
       bio: parsedData.summary_bio || prev.bio,
       employment_history: normalizeRepeaterData(parsedData.employment_history) || normalizeRepeaterData(prev.employment_history),
       education: normalizeRepeaterData(parsedData.education) || normalizeRepeaterData(prev.education),
-      skills: parsedData.skills || prev.skills,
+      skills: normalizeSelectOptions(parsedData.skills, SKILLS_OPTIONS) || prev.skills,
       certifications: parsedData.certifications || prev.certifications,
-      industry_experience: parsedData.industry_experience || prev.industry_experience,
-      functional_expertise: parsedData.functional_expertise || prev.functional_expertise,
+      industry_experience: normalizeSelectOptions(parsedData.industry_experience, INDUSTRY_OPTIONS) || prev.industry_experience,
+      functional_expertise: normalizeSelectOptions(parsedData.functional_expertise, FUNCTIONAL_EXPERTISE_OPTIONS) || prev.functional_expertise,
       resume_file_path: filePath,
     }));
   };
@@ -146,10 +147,10 @@ export default function TalentNetworkPage() {
         bio: formData.bio,
         employment_history: formData.employment_history,
         education: formData.education,
-        skills: formData.skills,
+        skills: normalizeSelectOptions(formData.skills, SKILLS_OPTIONS),
         certifications: formData.certifications.filter(c => c.trim()),
-        industry_experience: formData.industry_experience,
-        functional_expertise: formData.functional_expertise,
+        industry_experience: normalizeSelectOptions(formData.industry_experience, INDUSTRY_OPTIONS),
+        functional_expertise: normalizeSelectOptions(formData.functional_expertise, FUNCTIONAL_EXPERTISE_OPTIONS),
         availability: formData.availability,
         experience_years: formData.experience_years,
         preferred_engagement: formData.preferred_engagement,
