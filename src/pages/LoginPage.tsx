@@ -78,9 +78,7 @@ export default function LoginPage() {
                   <Briefcase className="h-5 w-5" />
                   <span className="font-semibold">I'm a Client</span>
                 </div>
-                <span className="text-sm text-muted-foreground">
-                  Submit a project brief
-                </span>
+                <span className="text-sm text-muted-foreground">Review and submit project briefs</span>
               </Button>
             </div>
           </form>
