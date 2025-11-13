@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.openai-assistant-chat]
 verify_jwt = false
+
+[functions.parse-resume]
+verify_jwt = true
