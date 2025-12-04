@@ -19,8 +19,14 @@ import TalentNetworkPage from "./pages/TalentNetworkPage";
 import ProjectBriefPage from "./pages/ProjectBriefPage";
 import SetupProfilePage from "./pages/SetupProfilePage";
 import SelectRolePage from "./pages/SelectRolePage";
+import { useGoogleAnalytics } from "@/hooks/useGoogleAnalytics";
 
 const queryClient = new QueryClient();
+
+const GoogleAnalyticsTracker = () => {
+  useGoogleAnalytics();
+  return null;
+};
 
 const App = () => {
 
@@ -31,6 +37,7 @@ const App = () => {
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <GoogleAnalyticsTracker />
             <ScrollToTop />
             <Routes>
               <Route path="/" element={<Index />} />
