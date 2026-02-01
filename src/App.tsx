@@ -19,6 +19,7 @@ import TalentNetworkPage from "./pages/TalentNetworkPage";
 import ProjectBriefPage from "./pages/ProjectBriefPage";
 import SetupProfilePage from "./pages/SetupProfilePage";
 import SelectRolePage from "./pages/SelectRolePage";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import { useGoogleAnalytics } from "@/hooks/useGoogleAnalytics";
 
 const queryClient = new QueryClient();
@@ -70,6 +71,7 @@ const App = () => {
               <Route path="/profile/chris-huss" element={<ChrisHussPage />} />
               <Route path="/profile/dale-cabreira" element={<DaleCabreiraPage />} />
               <Route path="/profile/eric-west" element={<EricWestPage />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
