@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Linkedin, Mail } from 'lucide-react';
 
 const Footer = () => {
@@ -44,9 +45,12 @@ const Footer = () => {
       </div>
       <div className="bg-black/30 py-4">
         <div className="container mx-auto px-4">
-          <p className="text-center text-sm">
-            © {new Date().getFullYear()} Kinetic Consulting Partners. All rights reserved.
-          </p>
+          <div className="flex flex-col md:flex-row justify-center items-center gap-4 text-sm">
+            <p>© {new Date().getFullYear()} Kinetic Consulting Partners. All rights reserved.</p>
+            <Link to="/privacy-policy" className="hover:text-kinetic-copper transition-colors">
+              Privacy Policy
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
